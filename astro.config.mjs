@@ -10,7 +10,7 @@ import { remarkReadingTime } from './remark-reading-time.mjs';
 // Sitemap: https://erpanomer.nurverse.com/projects/learning/sitemap.xml
 
 export default defineConfig({
-  site: 'https://erpanomer.nurverse.com',
+  site: 'https://mh0904.github.io',
   base: '/',
   output: 'static',  // 静态输出  GitHub Pages 不支持 SSR
 
@@ -19,7 +19,7 @@ export default defineConfig({
   // adapter: cloudflare({
   //   imageService: 'passthrough',
   // }),
-  
+
   image: {
     service: passthroughImageService()
   },
@@ -46,9 +46,9 @@ export default defineConfig({
   server: {
     open: true // 启动开发服务器时自动打开浏览器
   },
-  markdown: {
-    remarkPlugins: [remarkModifiedTime, remarkReadingTime],
-    shikiConfig: {
-    }
-  },
+  // markdown: {
+  //   remarkPlugins: [remarkModifiedTime, remarkReadingTime],
+  //   shikiConfig: {
+  //   }
+  // },
 })
