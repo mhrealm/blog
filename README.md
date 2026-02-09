@@ -108,10 +108,12 @@ npm run preview  # 预览生产构建
 ### 部署
 
 **GitHub Pages**（自动部署）:
+
 - 推送到 `master` 分支自动触发部署
 - 配置文件：`.github/workflows/deploy.yml`
 
 **Cloudflare Workers**:
+
 ```bash
 npm run build
 npx wrangler deploy
@@ -154,6 +156,7 @@ cover: "https://example.com/cover-image.jpg"
 ```
 
 **智能链接说明**：
+
 - 外部 URL（`http://` 或 `https://`）：自动跳转，新标签页打开
 - 相对路径：阻止跳转，显示 alert 弹窗（使用 `message` 字段或默认消息）
 
@@ -163,11 +166,21 @@ cover: "https://example.com/cover-image.jpg"
 
 ```typescript
 export const PROXY_TARGETS: ProxyTarget[] = [
-    {
-        name: 'project-name',
-        origin: 'https://your-project.pages.dev',
-        staticExtensions: ['js', 'css', 'woff2', 'woff', 'png', 'jpg', 'webp', 'svg', 'ico']
-    },
+  {
+    name: "project-name",
+    origin: "https://your-project.pages.dev",
+    staticExtensions: [
+      "js",
+      "css",
+      "woff2",
+      "woff",
+      "png",
+      "jpg",
+      "webp",
+      "svg",
+      "ico",
+    ],
+  },
 ];
 ```
 
@@ -196,17 +209,20 @@ erpanomer.github.io/
 ## 🔧 核心功能
 
 ### 博客系统
+
 - 基于 Astro Content Collections，类型安全
 - 路由：`/blog`（列表）、`/blog/[slug]`（详情）
 - 支持 Markdown、标签、封面图、草稿、阅读时间、最后修改时间
 
 ### SEO 优化
+
 - 自动生成 sitemap-index.xml
 - 动态生成 robots.txt
 - Open Graph 和结构化数据（JSON-LD）
 - 完整的 meta 标签配置
 
 ### 访问统计
+
 - 基于 Cloudflare KV 存储
 - Cookie 访客识别（visitor_id）
 - 每日访问量统计（site_views）
@@ -214,6 +230,7 @@ erpanomer.github.io/
 - 开发环境回退值（8888）
 
 ### 代理功能
+
 - **安全限制**：仅允许 GET 请求，URL 最大 2000 字符
 - **速率限制**：每 IP 每分钟 30 次请求，超限后挂起
 - **超时控制**：5 秒超时
@@ -221,6 +238,7 @@ erpanomer.github.io/
 - **详细错误处理**：完整的错误日志和状态码
 
 ### 项目智能链接
+
 - 外部 URL：自动跳转，新标签页打开
 - 相对路径：阻止默认行为，显示 alert 弹窗
 - 支持自定义消息提示
@@ -228,6 +246,7 @@ erpanomer.github.io/
 ## 🔍 常见问题
 
 **开发服务器无法启动**：
+
 ```bash
 # 检查端口占用
 netstat -ano | findstr :4321  # Windows
@@ -238,6 +257,7 @@ npm run dev -- --port 4322
 ```
 
 **构建失败**：
+
 ```bash
 rm -rf node_modules package-lock.json
 npm install
@@ -245,11 +265,13 @@ node --version  # 确保是 20.x 或更高
 ```
 
 **图片无法加载**：
+
 - 检查 `.env` 中的 `PUBLIC_CLOUDINARY_CLOUD_NAME`
 - 确认 Cloudinary 账户状态
 - 检查图片 URL 正确性
 
 **部署问题**：
+
 - KV 命名空间未找到：确保已创建并更新 ID
 - 部署失败：检查 `wrangler.jsonc` 配置
 - 路由错误：检查 Astro 配置中的 `base` 路径
@@ -265,6 +287,7 @@ node --version  # 确保是 20.x 或更高
 5. 开启 Pull Request
 
 **代码规范**：
+
 - 遵循现有代码风格
 - 使用 TypeScript 类型检查
 - 组件命名使用 PascalCase
@@ -283,6 +306,7 @@ node --version  # 确保是 20.x 或更高
 ## 🙏 致谢
 
 感谢以下开源项目：
+
 - [Astro](https://astro.build/) - 现代化的 Web 框架
 - [Tailwind CSS](https://tailwindcss.com/) - 实用优先的 CSS 框架
 - [Cloudflare](https://www.cloudflare.com/) - 边缘计算平台

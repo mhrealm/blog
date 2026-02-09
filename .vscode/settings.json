@@ -4,14 +4,12 @@
   "editor.insertSpaces": true, // 使用空格而非制表符
   "editor.detectIndentation": false, // 禁用自动检测缩进，强制用上面的配置
   "editor.trimAutoWhitespace": true, // 自动删除行尾多余空格
-
   // 保存时自动格式化 + 修复错误
   "editor.formatOnSave": true, // 保存时格式化
   "editor.codeActionsOnSave": {
-    "source.fixAll": true, // 自动修复所有可修复的错误（比如 ESLint 错误）
-    "source.organizeImports": true // 自动整理导入语句（删除未使用的 import）
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
   },
-
   // 为不同文件指定默认格式化工具
   "[astro]": {
     "editor.defaultFormatter": "astro-build.astro-vscode" // Astro 文件用官方插件格式化
@@ -31,13 +29,11 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode" // MD 文件用 Prettier
   },
-
   // 禁用内置的格式化工具，避免冲突
   "prettier.enable": true,
   "javascript.format.enable": false,
   "typescript.format.enable": false,
   "css.format.enable": false,
-
   // Astro 相关配置
   "astro.enableLanguageServer": true,
   "astro.typescript.intellisenseMode": "typescript"
