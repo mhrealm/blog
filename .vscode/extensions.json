@@ -1,4 +1,14 @@
 {
-  "recommendations": ["astro-build.astro-vscode"],
-  "unwantedRecommendations": []
+  "recommendations": [
+    // Astro 官方插件（必装）
+    "astro-build.astro-vscode",
+    // Prettier 格式化插件（必装）
+    "esbenp.prettier-vscode",
+    // ESLint 代码检查插件（必装）
+    "dbaeumer.vscode-eslint",
+    // Tailwind CSS 智能提示（你的项目用了 Tailwind，必装）
+    "bradlc.vscode-tailwindcss",
+    // 代码高亮增强
+    "streetsidesoftware.code-spell-checker"
+  ]
 }
