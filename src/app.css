@@ -4,137 +4,128 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --font-sans: 'Inter', ui-sans-serif,
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            'Segoe UI',
-            Roboto,
-            'Helvetica Neue',
-            Arial,
-            'PingFang SC',
-            'Hiragino Sans GB',
-            'Microsoft YaHei',
-            'Noto Sans CJK SC',
-            sans-serif;
-        ;
-        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-    }
+  :root {
+    --font-sans:
+      "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      "Noto Sans CJK SC", sans-serif;
+    --font-mono:
+      "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+  }
 
-    html {
-        scroll-behavior: smooth;
-        -webkit-tap-highlight-color: transparent;
-    }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    body {
-        font-family: var(--font-sans);
-        @apply antialiased;
-        font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
-    }
+  body {
+    font-family: var(--font-sans);
+    @apply antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
 
-    /* Selection highlight */
-    ::selection {
-        @apply bg-indigo-500/30;
-    }
+  /* Selection highlight */
+  ::selection {
+    @apply bg-indigo-500/30;
+  }
 
-    /* Scrollbar styling */
-    ::-webkit-scrollbar {
-        @apply w-2;
-    }
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
 
-    ::-webkit-scrollbar-track {
-        @apply bg-zinc-900;
-    }
+  ::-webkit-scrollbar-track {
+    @apply bg-zinc-900;
+  }
 
-    ::-webkit-scrollbar-thumb {
-        @apply bg-zinc-700 rounded-full;
-    }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700 rounded-full;
+  }
 
-    ::-webkit-scrollbar-thumb:hover {
-        @apply bg-zinc-600;
-    }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-600;
+  }
 
-    /* Code font */
-    code,
-    pre,
-    kbd,
-    samp {
-        font-family: var(--font-mono);
-    }
+  /* Code font */
+  code,
+  pre,
+  kbd,
+  samp {
+    font-family: var(--font-mono);
+  }
 }
 
 @layer components {
+  /* Vite-style code blocks */
+  .prose-blog {
+    @apply prose prose-invert max-w-none;
 
-    /* Vite-style code blocks */
-    .prose-blog {
-        @apply prose prose-invert max-w-none;
+    /* Paragraphs */
+    @apply prose-p:text-base prose-p:leading-relaxed prose-p:text-zinc-400;
 
-        /* Paragraphs */
-        @apply prose-p:text-base prose-p:leading-relaxed prose-p:text-zinc-400;
+    /* Headings */
+    @apply prose-headings:font-semibold prose-headings:text-white;
+    @apply prose-h2:text-xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-3 prose-h2:border-b prose-h2:border-zinc-800;
+    @apply prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3;
+    @apply prose-h4:text-base prose-h4:mt-6 prose-h4:mb-2;
 
-        /* Headings */
-        @apply prose-headings:font-semibold prose-headings:text-white;
-        @apply prose-h2:text-xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-3 prose-h2:border-b prose-h2:border-zinc-800;
-        @apply prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3;
-        @apply prose-h4:text-base prose-h4:mt-6 prose-h4:mb-2;
+    /* Links */
+    @apply prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline prose-a:underline-offset-4;
 
-        /* Links */
-        @apply prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline prose-a:underline-offset-4;
+    /* Strong */
+    @apply prose-strong:text-zinc-200 prose-strong:font-semibold;
 
-        /* Strong */
-        @apply prose-strong:text-zinc-200 prose-strong:font-semibold;
+    /* Blockquotes - Vite style */
+    @apply prose-blockquote:border-l-4 prose-blockquote:border-indigo-500 prose-blockquote:bg-zinc-900/50 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-zinc-300;
 
-        /* Blockquotes - Vite style */
-        @apply prose-blockquote:border-l-4 prose-blockquote:border-indigo-500 prose-blockquote:bg-zinc-900/50 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic prose-blockquote:text-zinc-300;
+    /* Inline code - Vite style */
+    @apply prose-code:text-sm prose-code:font-normal prose-code:text-[#bd93f9] prose-code:bg-zinc-800/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none;
 
-        /* Inline code - Vite style */
-        @apply prose-code:text-sm prose-code:font-normal prose-code:text-[#bd93f9] prose-code:bg-zinc-800/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none;
+    /* Code blocks - Vite/Shiki style */
+    @apply prose-pre:bg-[#1a1a1a] prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-xl prose-pre:shadow-lg;
 
-        /* Code blocks - Vite/Shiki style */
-        @apply prose-pre:bg-[#1a1a1a] prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-xl prose-pre:shadow-lg;
+    /* Images */
+    @apply prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-zinc-800;
 
-        /* Images */
-        @apply prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-zinc-800;
+    /* Horizontal rule */
+    @apply prose-hr:border-zinc-800 prose-hr:my-12;
 
-        /* Horizontal rule */
-        @apply prose-hr:border-zinc-800 prose-hr:my-12;
+    /* Lists */
+    @apply prose-ul:text-zinc-400 prose-ol:text-zinc-400;
+    @apply prose-li:marker:text-zinc-600;
+  }
 
-        /* Lists */
-        @apply prose-ul:text-zinc-400 prose-ol:text-zinc-400;
-        @apply prose-li:marker:text-zinc-600;
-    }
+  /* Code block enhancements */
+  .prose-blog pre {
+    @apply overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: #3f3f46 transparent;
+  }
 
-    /* Code block enhancements */
-    .prose-blog pre {
-        @apply overflow-x-auto;
-        scrollbar-width: thin;
-        scrollbar-color: #3f3f46 transparent;
-    }
+  .prose-blog pre::-webkit-scrollbar {
+    @apply h-2;
+  }
 
-    .prose-blog pre::-webkit-scrollbar {
-        @apply h-2;
-    }
+  .prose-blog pre::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
 
-    .prose-blog pre::-webkit-scrollbar-track {
-        @apply bg-transparent;
-    }
+  .prose-blog pre::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700 rounded-full;
+  }
 
-    .prose-blog pre::-webkit-scrollbar-thumb {
-        @apply bg-zinc-700 rounded-full;
-    }
-
-    .prose-blog pre code {
-        @apply bg-transparent p-0 text-sm leading-relaxed;
-        color: inherit;
-    }
+  .prose-blog pre code {
+    @apply bg-transparent p-0 text-sm leading-relaxed;
+    color: inherit;
+  }
 }
 
 @layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
+  .text-balance {
+    text-wrap: balance;
+  }
 }

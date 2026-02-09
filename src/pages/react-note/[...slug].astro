@@ -1,0 +1,196 @@
+---
+import AuthorCard from "@/components/AuthorCard.astro";
+import BlogStats from "@/components/BlogStats.astro";
+import Giscus from "@/components/Giscus.astro";
+import PostSidebarList from "@/components/PostSidebarList.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+// 1. 核心修改：将 getStaticPaths 指向 react-note 集合
+export async function getStaticPaths() {
+  const noteEntries = await getCollection("react-note");
+  return noteEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { slug } = Astro.params;
+const { entry: postEntry } = Astro.props;
+
+dayjs.extend(utc);
+
+// 2. 提取数据（逻辑与原 blog 保持一致）
+const title = postEntry.data.title;
+const description = postEntry.data.description;
+const pubDate = postEntry.data.pubDate;
+const lastModifiedVal = postEntry.data.lastModified;
+const author = postEntry.data.author;
+const cover = postEntry.data.cover;
+const tags = postEntry.data.tags;
+
+const { Content, remarkPluginFrontmatter, headings } = await postEntry.render();
+
+// 定义侧边栏数据（这里可以根据需要保持为空或获取最新的 react-note）
+const recentPosts = [];
+const popularPosts = [];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: title,
+  description: description,
+  datePublished: pubDate.toISOString(),
+  dateModified: lastModifiedVal ? dayjs(lastModifiedVal).toISOString() : pubDate.toISOString(),
+  author: {
+    "@type": "Person",
+    name: author,
+  },
+  url: new URL(Astro.url.pathname, Astro.site).toString(),
+  image: cover ? new URL(cover, Astro.site).toString() : undefined,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": new URL(Astro.url.pathname, Astro.site).toString(),
+  },
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={cover}
+  type="article"
+  publishedTime={pubDate}
+  tags={tags}
+>
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+    slot="head"
+  />
+
+  <div
+    class="max-w-[1280px] mx-auto px-4 sm:px-6 py-12 lg:py-16 grid grid-cols-1 lg:grid-cols-[60px_1fr_320px] gap-8 lg:gap-12"
+  >
+    <div class="hidden lg:block relative">
+      <div class="sticky top-32 flex flex-col gap-8 items-center">
+        <a
+          href="/react-note"
+          class="flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border border-white/5 text-gray-400 hover:text-white hover:border-white/20 hover:bg-white/10 transition-all duration-300 mb-4 group"
+          title="Back to Notes"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            >
+            </path>
+          </svg>
+        </a>
+        <BlogStats
+          slug={slug}
+          vertical={true}
+        />
+      </div>
+    </div>
+
+    <article class="min-w-0">
+      <a
+        href="/react-note"
+        class="lg:hidden inline-flex items-center gap-2 text-sm text-gh-muted hover:text-white mb-8 transition-colors"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          >
+          </path>
+        </svg>
+        <span>Back to Notes</span>
+      </a>
+
+      <header>
+        <h1 class="text-xl md:text-4xl font-extrabold text-white mb-6 leading-tight tracking-tight">
+          {title}
+        </h1>
+        <div class="flex flex-wrap gap-2 gap-y-1 mb-4">
+          {
+            tags.map((tag: string) => (
+              <span class="text-xs font-medium px-2 py-0.5 rounded text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 uppercase tracking-wide">
+                {tag}
+              </span>
+            ))
+          }
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gh-muted pb-6 lg:pb-8">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-xs uppercase"
+            >
+              <img
+                src="https://res.cloudinary.com/dkh81cvyt/image/upload/c_limit,w_120/f_auto/q_auto/v1/avatar_zjw8rn.png"
+                alt={author}
+                loading="lazy"
+                class="rounded-full"
+              />
+            </div>
+            <span class="font-medium text-gray-300">{author}</span>
+          </div>
+          <span>·</span>
+          <span>{new Date(pubDate).toLocaleDateString("sv-SE")}</span>
+          <span>·</span>
+          <span>{remarkPluginFrontmatter.minutesRead}</span>
+        </div>
+      </header>
+
+      {
+        cover && (
+          <div class="mb-6 md:mb-12 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
+            <img
+              src={cover}
+              alt={title}
+              class="w-full object-cover"
+              loading="eager"
+            />
+          </div>
+        )
+      }
+
+      <div
+        class="prose-blog prose prose-invert max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-indigo-400 hover:prose-a:text-indigo-300 prose-img:rounded-xl"
+      >
+        <Content />
+      </div>
+
+      <Giscus />
+    </article>
+
+    <div class="hidden lg:block relative">
+      <div class="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto pr-4 custom-scrollbar">
+        <AuthorCard author={author} />
+        <TableOfContents headings={headings} />
+        <PostSidebarList
+          title="最新笔记"
+          posts={recentPosts}
+        />
+      </div>
+    </div>
+  </div>
+</BaseLayout>

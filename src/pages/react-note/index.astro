@@ -1,0 +1,101 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+// 1. 获取所有非草稿的 blog 集合
+// 2. 核心逻辑：只筛选出 tags 数组中包含 "react" 的文章
+const posts = (
+  await getCollection("react-note", ({ data }) => {
+    return !data.draft;
+  })
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+// 统计 React 笔记数量
+const postCount = posts.length;
+---
+
+<BaseLayout
+  title="React 笔记"
+  description="深入浅出 React，记录我的学习历程与实战心得"
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20">
+    <div class="mb-12">
+      <a
+        href="/blog"
+        class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-white mb-6 transition-colors"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+          >
+          </path>
+        </svg>
+        <span>返回博客列表</span>
+      </a>
+
+      <div class="flex items-center gap-3 mb-3">
+        <h1 class="text-2xl sm:text-3xl font-bold text-white">React 笔记</h1>
+        <span
+          class="px-2 py-0.5 text-xs rounded-md bg-indigo-500/10 text-indigo-400 border border-indigo-500/20"
+        >
+          {postCount} 篇
+        </span>
+      </div>
+      <p class="text-base text-zinc-400">专注 React 生态系统，涵盖 Hooks、状态管理及性能优化。</p>
+    </div>
+
+    <div class="space-y-8">
+      {
+        posts.length > 0 ? (
+          posts.map((post) => (
+            <a
+              href={`/react-note/${post.slug}`}
+              class="group block"
+            >
+              <article class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 -mx-4 rounded-xl hover:bg-zinc-900/50 transition-colors border border-transparent hover:border-zinc-800">
+                {post.data.cover && (
+                  <div class="aspect-video flex-[0.5] flex-shrink-0 rounded-lg overflow-hidden bg-zinc-800">
+                    <img
+                      src={post.data.cover}
+                      alt={post.data.title}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                )}
+                <div class="flex-1 min-w-0 flex flex-col justify-center">
+                  <time
+                    class="text-sm text-zinc-500"
+                    datetime={post.data.pubDate.toISOString()}
+                  >
+                    {post.data.pubDate.toLocaleDateString("zh-CN", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <h2 class="text-base sm:text-lg font-semibold text-white mt-1.5 mb-1.5 group-hover:text-indigo-400 transition-colors">
+                    {post.data.title}
+                  </h2>
+                  <p class="text-sm text-zinc-400 line-clamp-2">{post.data.description}</p>
+                </div>
+              </article>
+            </a>
+          ))
+        ) : (
+          <div class="text-center py-20 border border-dashed border-zinc-800 rounded-2xl">
+            <p class="text-zinc-500">暂无 React 相关的笔记</p>
+            <p class="text-xs text-zinc-600 mt-2">请确保 Markdown 的 tags 中包含 "react"</p>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</BaseLayout>
