@@ -5,7 +5,8 @@ pubDate: 2026-01-13
 lastModified: 2026-01-13T19:16:00.000Z
 author: "ErpanOmer"
 draft: false
-tags: ["Turbo Mail Sender", "Gemeni 3 Pro", "AI", "Antigravity", "SSR", "Node JS"]
+tags:
+  ["Turbo Mail Sender", "Gemeni 3 Pro", "AI", "Antigravity", "SSR", "Node JS"]
 cover: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_1000/f_webp/v1768272184/ChatGPT_Image_2026%E5%B9%B41%E6%9C%8813%E6%97%A5_10_42_36_xrtug0.png"
 ---
 
@@ -23,9 +24,9 @@ cover: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_1000/f_webp/v1768272
 
 以前我写这套东西起码得两天，这次连写带调，**2 小时收工**。
 
-今天复盘一下我是怎么压榨 [Antigravity - Gemini 3 Pro](https://antigravity.google/) 开发出这个 **Turbo Mail Sender** 的。源码我已经[开源到 GitHub](https://github.com/ErpanOmer/turbo-mail-sender) 了，文末自取，记得给个 Star😁！
+今天复盘一下我是怎么压榨 [Antigravity - Gemini 3 Pro](https://antigravity.google/) 开发出这个 **Turbo Mail Sender** 的。源码我已经[开源到 GitHub](https://github.com/mhrealm/turbo-mail-sender) 了，文末自取，记得给个 Star😁！
 
-***
+---
 
 ### 不仅要看得下去，还要骚气点🤔
 
@@ -34,11 +35,8 @@ cover: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_1000/f_webp/v1768272
 > 我要做一个邮件群发工具的单页 UI。要求：
 >
 > 1.  写邮件（集成 Quill 富文本编辑器）。
->
 > 2.  包含监控发送进度（要有一个骚气的进度条和实时日志）。
->
 > 3.  用 Tailwind CSS，设计风格要轻色单栏，带点微交互动画。
->
 > 4.  直接给我 HTML 单文件就行。
 
 **它思考了大概几分钟（网络环境有点差😥）。**
@@ -48,19 +46,38 @@ cover: "https://res.cloudinary.com/dkh81cvyt/image/upload/w_1000/f_webp/v1768272
 
 ```html
 <style>
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform: translateY(0); } }
-    .log-entry { opacity:0; transform:translateY(6px); animation: fadeInUp 420ms ease forwards; }
-    /* 进度条的光泽动画，这审美绝了 */
-    @keyframes shimmer { 0% { background-position: -200px 0 } 100% { background-position: 200px 0 } }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .log-entry {
+    opacity: 0;
+    transform: translateY(6px);
+    animation: fadeInUp 420ms ease forwards;
+  }
+  /* 进度条的光泽动画，这审美绝了 */
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: 200px 0;
+    }
+  }
 </style>
-
 ```
 
 ![screenshot-20260112-115836.png](https://res.cloudinary.com/dkh81cvyt/image/upload/f_webp/v1768272619/screenshot-20260112-114801_fnzsb7.png)
 
 最骚的是，它连 JS 里的富文本编辑器初始化都帮我写好了，甚至考虑到了 SSR 的数据回填逻辑。这哪里是 AI，这简直就是自带 3 年经验的前端同事。
 
-***
+---
 
 ### 从普通的脚本到工程化
 
@@ -72,11 +89,8 @@ UI 画好了，接下来是后端。这里才是见真章的地方。
 > 后端用 Express + Nodemailer。注意，我要发送几万封邮件。
 >
 > 1.  必须有 **连接池 (Connection Pooling)**，不能每次发送都握手。
->
 > 2.  必须有 **生产者-消费者队列**，控制并发数（Concurrency）。
->
 > 3.  失败要自动重试。
->
 > 4.  给我写出架构级的代码。
 
 如果是以前的 AI，大概率会给我瞎编一个队列。
@@ -89,28 +103,27 @@ UI 画好了，接下来是后端。这里才是见真章的地方。
 ```javascript
 // server.js 核心片段：连接池
 class TransporterCache {
-    constructor() {
-        this.cache = new Map();
-    }
-    get(host, port, user, pass) {
-        const key = `${user}@${host}`;
-        if (this.cache.has(key)) return this.cache.get(key);
+  constructor() {
+    this.cache = new Map();
+  }
+  get(host, port, user, pass) {
+    const key = `${user}@${host}`;
+    if (this.cache.has(key)) return this.cache.get(key);
 
-        // Gemini 居然知道开启 pool: true 选项
-        const transporter = nodemailer.createTransport({
-            pool: true, 
-            host: host,
-            port: Number(port),
-            secure: Number(port) === 465,
-            auth: { user, pass },
-            maxConnections: 3, // 自动限制最大连接数
-            rateLimit: 5       // 还有速率限制，讲究
-        });
-        this.cache.set(key, transporter);
-        return transporter;
-    }
+    // Gemini 居然知道开启 pool: true 选项
+    const transporter = nodemailer.createTransport({
+      pool: true,
+      host: host,
+      port: Number(port),
+      secure: Number(port) === 465,
+      auth: { user, pass },
+      maxConnections: 3, // 自动限制最大连接数
+      rateLimit: 5, // 还有速率限制，讲究
+    });
+    this.cache.set(key, transporter);
+    return transporter;
+  }
 }
-
 ```
 
 #### 像模像样的任务队列
@@ -120,26 +133,30 @@ class TransporterCache {
 ```javascript
 // server.js 核心片段：消费者 Worker
 class Worker {
-    constructor() { setInterval(() => this.tick(), 500); }
+  constructor() {
+    setInterval(() => this.tick(), 500);
+  }
 
-    tick() {
-        // 经典的消费逻辑：控制并发数
-        while (taskManager.running < CONFIG.CONCURRENCY && taskManager.queue.length > 0) {
-            const id = taskManager.queue.shift();
-            const task = taskManager.getTask(id);
-            if (task) this.processTask(task);
-        }
+  tick() {
+    // 经典的消费逻辑：控制并发数
+    while (
+      taskManager.running < CONFIG.CONCURRENCY &&
+      taskManager.queue.length > 0
+    ) {
+      const id = taskManager.queue.shift();
+      const task = taskManager.getTask(id);
+      if (task) this.processTask(task);
     }
-    // ...发送与重试逻辑
+  }
+  // ...发送与重试逻辑
 }
-
 ```
 
 看到这段代码时，我意识到：**Gemini 不仅仅是在翻译需求，它更懂架构。**
 
 ![20260112-120211.jpg](https://res.cloudinary.com/dkh81cvyt/image/upload/f_webp/v1768272750/20260112-120211_yyifwk.jpg)
 
-***
+---
 
 ### 最后的细节修改
 
@@ -154,30 +171,31 @@ Gemini 3 Pro 给出的方案是：**SSR (服务端渲染) + LocalStorage 双重�
 ```javascript
 // server.js：极其暴力的正则替换 SSR，简单粗暴但有效
 if (host) {
-    html = html.replace(/id="smtpHost"\s+type="text"\s+value="[^"]*"/,
-        `id="smtpHost" type="text" value="${host}"`);
+  html = html.replace(
+    /id="smtpHost"\s+type="text"\s+value="[^"]*"/,
+    `id="smtpHost" type="text" value="${host}"`,
+  );
 }
-
 ```
 
 说实话，这种正则替换虽然看起来很脏，但在这种微型工具里，**不仅省事，而且性能极高**。AI 这种能力（知道是小工具就不上重型框架），才是最可怕的。
 
-***
+---
 
 ### 成果与开源
 
 最终，这个 **Turbo Mail Sender** 具备了以下能力：
 
-*   🚀 **高并发发送**：连接池 + 异步队列。
-*   📊 **实时可视化**：能看到每一封邮件的发送状态、耗时。
-*   🛡️ **智能重试**：遇到网络抖动自动重发。
-*   📂 **CSV 导入**：支持批量导入收件人。
+- 🚀 **高并发发送**：连接池 + 异步队列。
+- 📊 **实时可视化**：能看到每一封邮件的发送状态、耗时。
+- 🛡️ **智能重试**：遇到网络抖动自动重发。
+- 📂 **CSV 导入**：支持批量导入收件人。
 
-我把整个项目打包开源了。如果你也需要一个**免费、私有、无限制**的邮件群发工具，或者你想研究一下 **Gemini 3 Pro 生成的代码到底有多工整**，[欢迎来 GitHub 提 👉 Issue](https://github.com/ErpanOmer/turbo-mail-sender)。
+我把整个项目打包开源了。如果你也需要一个**免费、私有、无限制**的邮件群发工具，或者你想研究一下 **Gemini 3 Pro 生成的代码到底有多工整**，[欢迎来 GitHub 提 👉 Issue](https://github.com/mhrealm/turbo-mail-sender)。
 
 ![screenshot-20260112-120615.png](https://res.cloudinary.com/dkh81cvyt/image/upload/f_webp/v1768273034/screenshot-20260112-120615_ozx4wk.png)
 
-***
+---
 
 以前我们常说全栈工程师。
 做完这个项目我觉得，以后可能只有一种工程师，叫 **Prompt 工程师**。
@@ -190,5 +208,4 @@ if (host) {
 
 **在线体验：**
 👉 [Turbo Mail Sender](https://erpanomer.nurverse.com/tools/turbo-mail-sender)
-*(觉得好用记得点个 Star，孩子想上热榜🤣)*
-
+_(觉得好用记得点个 Star，孩子想上热榜🤣)_

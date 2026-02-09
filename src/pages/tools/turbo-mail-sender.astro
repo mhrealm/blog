@@ -7,1004 +7,925 @@ const description = "批量邮件群发工具，支持 SMTP 配置与可视化�
 ---
 
 <BaseLayout title={title} description={description}>
-    <div class="max-w-5xl mx-auto px-4 py-8 md:py-16">
-        <header
-            class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
+  <div class="max-w-5xl mx-auto px-4 py-8 md:py-16">
+    <header
+      class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6"
+    >
+      <div class="flex items-center space-x-4">
+        <div
+          class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-indigo-50 dark:ring-indigo-900/20"
         >
-            <div class="flex items-center space-x-4">
-                <div
-                    class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600 to-blue-500 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-indigo-50 dark:ring-indigo-900/20"
-                >
-                    TM
-                </div>
-                <div>
-                    <h1
-                        class="text-2xl font-black text-gray-900 dark:text-white tracking-tight"
-                    >
-                        Turbo Mail Sender
-                    </h1>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span
-                            class="text-xs font-medium px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400"
-                            >v2.1 Open Source</span
-                        >
-                        <p class="text-xs text-gray-400 dark:text-gray-500">
-                            高性能邮件群发控制台
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="flex items-center justify-between md:justify-end gap-3 bg-gray-50 dark:bg-gray-800/50 p-4 md:px-8 rounded-xl border border-gray-100 dark:border-gray-700/50 md:bg-transparent md:border-none"
+          TM
+        </div>
+        <div>
+          <h1
+            class="text-2xl font-black text-gray-900 dark:text-white tracking-tight"
+          >
+            Turbo Mail Sender
+          </h1>
+          <div class="flex items-center gap-2 mt-1">
+            <span
+              class="text-xs font-medium px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400"
+              >v2.1 Open Source</span
             >
-                <div class="flex flex-col">
-                    <span
-                        id="connectionStatus"
-                        class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-bold shadow-sm border border-gray-100 dark:border-gray-700"
-                    >
-                        <span
-                            class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse"
-                        ></span> 未连接
-                    </span>
-                    <p
-                        class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold"
-                    >
-                        Service Status
-                    </p>
-                </div>
-            </div>
-        </header>
+            <p class="text-xs text-gray-400 dark:text-gray-500">
+              高性能邮件群发控制台
+            </p>
+          </div>
+        </div>
+      </div>
 
-        <!-- SERVER CONFIG (New) -->
-        <section
-            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
-        >
-            <div class="flex justify-between items-center mb-4">
-                <h2
-                    class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
-                >
-                    STEP 0: 服务端配置
-                </h2>
-                <span class="text-xs text-gray-400">Backend</span>
-            </div>
-            <div class="flex gap-3 items-end">
-                <div class="flex-1">
-                    <label
-                        class="text-xs text-gray-500 dark:text-gray-400 mb-1 block"
-                        >API Server URL</label
-                    >
-                    <input
-                        id="apiBaseUrl"
-                        type="text"
-                        value=""
-                        placeholder=""
-                        class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                    />
-                </div>
-                <button
-                    id="checkConnBtn"
-                    class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition h-[38px]"
-                >
-                    测试连接
-                </button>
-            </div>
-        </section>
+      <div
+        class="flex items-center justify-between md:justify-end gap-3 bg-gray-50 dark:bg-gray-800/50 p-4 md:px-8 rounded-xl border border-gray-100 dark:border-gray-700/50 md:bg-transparent md:border-none"
+      >
+        <div class="flex flex-col">
+          <span
+            id="connectionStatus"
+            class="inline-flex items-center px-3 py-1 rounded-full bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 text-xs font-bold shadow-sm border border-gray-100 dark:border-gray-700"
+          >
+            <span class="w-2 h-2 rounded-full bg-gray-300 mr-2 animate-pulse"
+            ></span> 未连接
+          </span>
+          <p
+            class="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold"
+          >
+            Service Status
+          </p>
+        </div>
+      </div>
+    </header>
 
-        <!-- SECTION 1: SMTP 配置 -->
-        <section
-            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
+    <!-- SERVER CONFIG (New) -->
+    <section
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <h2
+          class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
         >
-            <div class="flex justify-between items-center mb-4">
-                <h2
-                    class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
-                >
-                    STEP 1: 发件人配置
-                </h2>
-                <span class="text-xs text-gray-400">SMTP</span>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <input
-                    id="smtpHost"
-                    type="text"
-                    placeholder="smtp.qq.com"
-                    class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                />
-                <input
-                    id="smtpPort"
-                    type="number"
-                    placeholder="465"
-                    class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                />
-                <input
-                    id="senderEmail"
-                    type="email"
-                    placeholder="you@example.com"
-                    class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                />
-                <input
-                    id="senderPass"
-                    type="password"
-                    placeholder="密码 / 授权码"
-                    class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                />
-            </div>
-        </section>
+          STEP 0: 服务端配置
+        </h2>
+        <span class="text-xs text-gray-400">Backend</span>
+      </div>
+      <div class="flex gap-3 items-end">
+        <div class="flex-1">
+          <label class="text-xs text-gray-500 dark:text-gray-400 mb-1 block"
+            >API Server URL</label
+          >
+          <input
+            id="apiBaseUrl"
+            type="text"
+            value=""
+            placeholder=""
+            class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+          />
+        </div>
+        <button
+          id="checkConnBtn"
+          class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition h-[38px]"
+        >
+          测试连接
+        </button>
+      </div>
+    </section>
 
-        <!-- SECTION 2: 邮件内容 -->
-        <section
-            class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
+    <!-- SECTION 1: SMTP 配置 -->
+    <section
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
+    >
+      <div class="flex justify-between items-center mb-4">
+        <h2
+          class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
         >
+          STEP 1: 发件人配置
+        </h2>
+        <span class="text-xs text-gray-400">SMTP</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <input
+          id="smtpHost"
+          type="text"
+          placeholder="smtp.qq.com"
+          class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+        />
+        <input
+          id="smtpPort"
+          type="number"
+          placeholder="465"
+          class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+        />
+        <input
+          id="senderEmail"
+          type="email"
+          placeholder="you@example.com"
+          class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+        />
+        <input
+          id="senderPass"
+          type="password"
+          placeholder="密码 / 授权码"
+          class="border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+        />
+      </div>
+    </section>
+
+    <!-- SECTION 2: 邮件内容 -->
+    <section
+      class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-5 border border-gray-100 dark:border-gray-700"
+    >
+      <h2
+        class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-4"
+      >
+        STEP 2: 邮件内容
+      </h2>
+      <input
+        id="mailSubject"
+        type="text"
+        placeholder="邮件主题"
+        class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+      />
+      <div
+        id="editor-container"
+        class="rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+        style="min-height:200px;"
+      >
+      </div>
+    </section>
+
+    <!-- SECTION 3: 收件人 + 策略 + 监控 -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-8">
+      <!-- 左：收件人列表 -->
+      <div class="lg:col-span-7">
+        <section
+          class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 h-full flex flex-col border border-gray-100 dark:border-gray-700"
+        >
+          <div class="flex justify-between items-center mb-3">
             <h2
-                class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-4"
+              class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
             >
-                STEP 2: 邮件内容
+              STEP 3: 收件人
             </h2>
-            <input
-                id="mailSubject"
-                type="text"
-                placeholder="邮件主题"
-                class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-3 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-            />
-            <div
-                id="editor-container"
-                class="rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
-                style="min-height:200px;"
-            >
-            </div>
-        </section>
+            <span id="recipientCount" class="text-xs text-gray-500">0 人</span>
+          </div>
 
-        <!-- SECTION 3: 收件人 + 策略 + 监控 -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-8">
-            <!-- 左：收件人列表 -->
-            <div class="lg:col-span-7">
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 h-full flex flex-col border border-gray-100 dark:border-gray-700"
-                >
-                    <div class="flex justify-between items-center mb-3">
-                        <h2
-                            class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase"
-                        >
-                            STEP 3: 收件人
-                        </h2>
-                        <span id="recipientCount" class="text-xs text-gray-500"
-                            >0 人</span
-                        >
-                    </div>
-
-                    <textarea
-                        id="recipientList"
-                        rows="10"
-                        placeholder="zhangsan@example.com
+          <textarea
+            id="recipientList"
+            rows="10"
+            placeholder="zhangsan@example.com
 lisi@example.com
 或粘贴邮箱列表"
-                        class="flex-1 border dark:border-gray-600 rounded-lg p-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none mb-3"
-                    ></textarea>
+            class="flex-1 border dark:border-gray-600 rounded-lg p-3 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none focus:ring-2 focus:ring-indigo-500 focus:outline-none mb-3"
+          ></textarea>
 
-                    <div class="flex gap-2">
-                        <input
-                            id="csvInput"
-                            type="file"
-                            accept=".csv"
-                            class="hidden"
-                        />
-                        <button
-                            id="importBtn"
-                            class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-                        >
-                            📂 导入 CSV
-                        </button>
-                        <button
-                            id="sendBtn"
-                            class="flex-1 px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold text-center hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30"
-                        >
-                            🚀 START MISSION
-                        </button>
-                    </div>
-                </section>
+          <div class="flex gap-2">
+            <input id="csvInput" type="file" accept=".csv" class="hidden" />
+            <button
+              id="importBtn"
+              class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+            >
+              📂 导入 CSV
+            </button>
+            <button
+              id="sendBtn"
+              class="flex-1 px-6 py-3 rounded-lg bg-indigo-600 text-white font-bold text-center hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30"
+            >
+              🚀 START MISSION
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- 右：策略 + 监控 -->
+      <div class="lg:col-span-5 flex flex-col gap-5">
+        <!-- 策略配置 -->
+        <section
+          class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 border border-gray-100 dark:border-gray-700"
+        >
+          <h3
+            class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-3"
+          >
+            发送策略
+          </h3>
+          <div class="space-y-2">
+            <div>
+              <label
+                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
+                >单封延迟 (ms)</label
+              >
+              <input
+                id="cfgDelay"
+                type="number"
+                value="1000"
+                class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              />
             </div>
-
-            <!-- 右：策略 + 监控 -->
-            <div class="lg:col-span-5 flex flex-col gap-5">
-                <!-- 策略配置 -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 border border-gray-100 dark:border-gray-700"
-                >
-                    <h3
-                        class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-3"
-                    >
-                        发送策略
-                    </h3>
-                    <div class="space-y-2">
-                        <div>
-                            <label
-                                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
-                                >单封延迟 (ms)</label
-                            >
-                            <input
-                                id="cfgDelay"
-                                type="number"
-                                value="1000"
-                                class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                            />
-                        </div>
-                        <div>
-                            <label
-                                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
-                                >最大重试次数</label
-                            >
-                            <input
-                                id="cfgMaxRetries"
-                                type="number"
-                                value="3"
-                                class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
-                            />
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 运行监控 -->
-                <section
-                    class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 flex-1 border border-gray-100 dark:border-gray-700"
-                >
-                    <h3
-                        class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-3"
-                    >
-                        运行监控
-                    </h3>
-
-                    <!-- 进度条 -->
-                    <div class="mb-3">
-                        <div
-                            class="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400 mb-1"
-                        >
-                            <span>Progress</span>
-                            <span
-                                id="progressPercent"
-                                class="font-mono font-bold">0%</span
-                            >
-                        </div>
-                        <div
-                            class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 overflow-hidden"
-                        >
-                            <div
-                                id="progressBar"
-                                class="h-3 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all"
-                                style="width:0%"
-                            >
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 统计数字 -->
-                    <div class="grid grid-cols-3 gap-2 mb-3">
-                        <div
-                            class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
-                        >
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
-                            >
-                                Queue
-                            </div>
-                            <div
-                                id="statQueue"
-                                class="font-mono font-bold text-xl text-gray-800 dark:text-white"
-                            >
-                                0
-                            </div>
-                        </div>
-                        <div
-                            class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
-                        >
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
-                            >
-                                Sending
-                            </div>
-                            <div
-                                id="statRunning"
-                                class="font-mono font-bold text-xl text-blue-600 dark:text-blue-400"
-                            >
-                                0
-                            </div>
-                        </div>
-                        <div
-                            class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
-                        >
-                            <div
-                                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
-                            >
-                                Done
-                            </div>
-                            <div
-                                id="statDone"
-                                class="font-mono font-bold text-xl text-green-600 dark:text-green-400"
-                            >
-                                0
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 日志窗 -->
-                    <div
-                        id="logBox"
-                        class="h-32 overflow-auto border dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-300 space-y-1 mb-3 font-mono"
-                    >
-                        <div class="text-gray-400">> Ready.</div>
-                    </div>
-
-                    <button
-                        id="exportBtn"
-                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
-                    >
-                        📥 导出结果
-                    </button>
-                </section>
+            <div>
+              <label
+                class="text-xs text-gray-600 dark:text-gray-400 font-medium"
+                >最大重试次数</label
+              >
+              <input
+                id="cfgMaxRetries"
+                type="number"
+                value="3"
+                class="w-full border dark:border-gray-600 rounded-lg p-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+              />
             </div>
+          </div>
+        </section>
+
+        <!-- 运行监控 -->
+        <section
+          class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 flex-1 border border-gray-100 dark:border-gray-700"
+        >
+          <h3
+            class="text-sm font-bold text-gray-800 dark:text-gray-200 uppercase mb-3"
+          >
+            运行监控
+          </h3>
+
+          <!-- 进度条 -->
+          <div class="mb-3">
+            <div
+              class="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400 mb-1"
+            >
+              <span>Progress</span>
+              <span id="progressPercent" class="font-mono font-bold">0%</span>
+            </div>
+            <div
+              class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3 overflow-hidden"
+            >
+              <div
+                id="progressBar"
+                class="h-3 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-full transition-all"
+                style="width:0%"
+              >
+              </div>
+            </div>
+          </div>
+
+          <!-- 统计数字 -->
+          <div class="grid grid-cols-3 gap-2 mb-3">
+            <div
+              class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
+            >
+              <div class="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                Queue
+              </div>
+              <div
+                id="statQueue"
+                class="font-mono font-bold text-xl text-gray-800 dark:text-white"
+              >
+                0
+              </div>
+            </div>
+            <div
+              class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
+            >
+              <div class="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                Sending
+              </div>
+              <div
+                id="statRunning"
+                class="font-mono font-bold text-xl text-blue-600 dark:text-blue-400"
+              >
+                0
+              </div>
+            </div>
+            <div
+              class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 text-center"
+            >
+              <div class="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                Done
+              </div>
+              <div
+                id="statDone"
+                class="font-mono font-bold text-xl text-green-600 dark:text-green-400"
+              >
+                0
+              </div>
+            </div>
+          </div>
+
+          <!-- 日志窗 -->
+          <div
+            id="logBox"
+            class="h-32 overflow-auto border dark:border-gray-600 rounded-lg p-2 bg-white dark:bg-gray-900 text-xs text-gray-700 dark:text-gray-300 space-y-1 mb-3 font-mono"
+          >
+            <div class="text-gray-400">> Ready.</div>
+          </div>
+
+          <button
+            id="exportBtn"
+            class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+          >
+            📥 导出结果
+          </button>
+        </section>
+      </div>
+    </div>
+
+    <!-- Instructions Section -->
+    <section class="mt-12 space-y-6">
+      <div
+        class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 p-4 md:p-8 rounded-2xl border border-indigo-100 dark:border-gray-700"
+      >
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
+        >
+          <div>
+            <h3 class="text-2xl font-extrabold text-indigo-900 dark:text-white">
+              📖 使用指南
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+              本工具需配合邮件后端服务使用（支持本地或远程部署）。
+            </p>
+          </div>
+          <a
+            href="https://github.com/mhrealm/turbo-mail-sender/blob/main/README.MD"
+            target="_blank"
+            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition shadow-md flex items-center gap-2"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              ><path
+                fill-rule="evenodd"
+                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                clip-rule="evenodd"></path></svg
+            >
+            详细部署文档
+          </a>
         </div>
 
-        <!-- Instructions Section -->
-        <section class="mt-12 space-y-6">
+        <!-- Usage Flow -->
+        <div class="space-y-6">
+          <h4
+            class="font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2"
+          >
+            使用流程
+          </h4>
+          <ol
+            class="list-decimal pl-5 space-y-2 text-sm text-gray-700 dark:text-gray-300"
+          >
+            <li>
+              <strong>服务端配置</strong
+              >：确保后端服务已启动（本地或远程），并在 Step 0
+              输入地址测试连接。
+            </li>
+            <li>
+              <strong>配置发件人</strong>：填写 SMTP
+              服务器、端口、邮箱和密码（或授权码）。
+            </li>
+            <li>
+              <strong>编辑邮件</strong>：输入主题，使用富文本编辑器编写内容。
+            </li>
+            <li>
+              <strong>添加收件人</strong>：手动输入（每行一个）或导入 CSV 文件。
+              <div
+                class="mt-1 p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-500"
+              >
+                格式示例:<br />
+                email<br />
+                user1@example.com<br />
+                user2@example.com
+              </div>
+            </li>
+            <li>
+              <strong>设置策略</strong>：配置发送延迟和重试次数。
+            </li>
+            <li>
+              <strong>发送监控</strong>：实时查看进度和日志，导出结果。
+            </li>
+          </ol>
+        </div>
+
+        <!-- SMTP Configs -->
+        <div class="mt-6 space-y-6">
+          <h4
+            class="font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2"
+          >
+            常用 SMTP 配置参考
+          </h4>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+            <!-- QQ -->
             <div
-                class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-gray-800 dark:to-gray-800 p-4 md:p-8 rounded-2xl border border-indigo-100 dark:border-gray-700"
+              class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
             >
-                <div
-                    class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6"
-                >
-                    <div>
-                        <h3
-                            class="text-2xl font-extrabold text-indigo-900 dark:text-white"
-                        >
-                            📖 使用指南
-                        </h3>
-                        <p
-                            class="text-sm text-gray-500 dark:text-gray-400 mt-1"
-                        >
-                            本工具需配合邮件后端服务使用（支持本地或远程部署）。
-                        </p>
-                    </div>
-                    <a
-                        href="https://github.com/ErpanOmer/turbo-mail-sender/blob/main/README.MD"
-                        target="_blank"
-                        class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-lg transition shadow-md flex items-center gap-2"
-                    >
-                        <svg
-                            class="w-5 h-5"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                            ><path
-                                fill-rule="evenodd"
-                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                clip-rule="evenodd"></path></svg
-                        >
-                        详细部署文档
-                    </a>
-                </div>
-
-                <!-- Usage Flow -->
-                <div class="space-y-6">
-                    <h4
-                        class="font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2"
-                    >
-                        使用流程
-                    </h4>
-                    <ol
-                        class="list-decimal pl-5 space-y-2 text-sm text-gray-700 dark:text-gray-300"
-                    >
-                        <li>
-                            <strong>服务端配置</strong
-                            >：确保后端服务已启动（本地或远程），并在 Step 0
-                            输入地址测试连接。
-                        </li>
-                        <li>
-                            <strong>配置发件人</strong>：填写 SMTP
-                            服务器、端口、邮箱和密码（或授权码）。
-                        </li>
-                        <li>
-                            <strong>编辑邮件</strong
-                            >：输入主题，使用富文本编辑器编写内容。
-                        </li>
-                        <li>
-                            <strong>添加收件人</strong
-                            >：手动输入（每行一个）或导入 CSV 文件。
-                            <div
-                                class="mt-1 p-2 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-500"
-                            >
-                                格式示例:<br />
-                                email<br />
-                                user1@example.com<br />
-                                user2@example.com
-                            </div>
-                        </li>
-                        <li>
-                            <strong>设置策略</strong>：配置发送延迟和重试次数。
-                        </li>
-                        <li>
-                            <strong>发送监控</strong
-                            >：实时查看进度和日志，导出结果。
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- SMTP Configs -->
-                <div class="mt-6 space-y-6">
-                    <h4
-                        class="font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2"
-                    >
-                        常用 SMTP 配置参考
-                    </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <!-- QQ -->
-                        <div
-                            class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
-                        >
-                            <div
-                                class="font-bold text-indigo-600 dark:text-indigo-400 mb-2"
-                            >
-                                QQ 邮箱
-                            </div>
-                            <ul
-                                class="space-y-1 text-xs text-gray-600 dark:text-gray-300"
-                            >
-                                <li><strong>服务器:</strong> smtp.qq.com</li>
-                                <li>
-                                    <strong>端口:</strong> 465 (SSL) / 587 (TLS)
-                                </li>
-                                <li>
-                                    <strong>授权码:</strong> 在邮箱设置中生成
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- Gmail -->
-                        <div
-                            class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
-                        >
-                            <div
-                                class="font-bold text-red-600 dark:text-red-400 mb-2"
-                            >
-                                Gmail
-                            </div>
-                            <ul
-                                class="space-y-1 text-xs text-gray-600 dark:text-gray-300"
-                            >
-                                <li><strong>服务器:</strong> smtp.gmail.com</li>
-                                <li>
-                                    <strong>端口:</strong> 465 (SSL) / 587 (TLS)
-                                </li>
-                                <li>
-                                    <strong>授权码:</strong> 需开启两步验证并生成应用专用密码
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- 163 -->
-                        <div
-                            class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
-                        >
-                            <div
-                                class="font-bold text-green-600 dark:text-green-400 mb-2"
-                            >
-                                163 邮箱
-                            </div>
-                            <ul
-                                class="space-y-1 text-xs text-gray-600 dark:text-gray-300"
-                            >
-                                <li><strong>服务器:</strong> smtp.163.com</li>
-                                <li><strong>端口:</strong> 465 (SSL)</li>
-                                <li>
-                                    <strong>授权码:</strong> 在邮箱设置中开启 SMTP
-                                    服务
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700"
-                >
-                    <p class="text-xs text-gray-500 text-center">
-                        💡
-                        遇到问题？关于服务端部署、API接口定义及常见报错排查，请访问
-                        <a
-                            href="https://github.com/ErpanOmer/turbo-mail-sender"
-                            target="_blank"
-                            class="text-indigo-600 hover:underline"
-                            >GitHub 仓库</a
-                        > 查看完整文档。
-                    </p>
-                </div>
+              <div class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">
+                QQ 邮箱
+              </div>
+              <ul class="space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                <li><strong>服务器:</strong> smtp.qq.com</li>
+                <li>
+                  <strong>端口:</strong> 465 (SSL) / 587 (TLS)
+                </li>
+                <li>
+                  <strong>授权码:</strong> 在邮箱设置中生成
+                </li>
+              </ul>
             </div>
-        </section>
-        <!-- PROMOTION BANNER -->
-        <section
-            class="my-8 md:mt-12 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 p-[1px] shadow-xl shadow-indigo-500/20"
+            <!-- Gmail -->
+            <div
+              class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
+            >
+              <div class="font-bold text-red-600 dark:text-red-400 mb-2">
+                Gmail
+              </div>
+              <ul class="space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                <li><strong>服务器:</strong> smtp.gmail.com</li>
+                <li>
+                  <strong>端口:</strong> 465 (SSL) / 587 (TLS)
+                </li>
+                <li>
+                  <strong>授权码:</strong> 需开启两步验证并生成应用专用密码
+                </li>
+              </ul>
+            </div>
+            <!-- 163 -->
+            <div
+              class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-600"
+            >
+              <div class="font-bold text-green-600 dark:text-green-400 mb-2">
+                163 邮箱
+              </div>
+              <ul class="space-y-1 text-xs text-gray-600 dark:text-gray-300">
+                <li><strong>服务器:</strong> smtp.163.com</li>
+                <li><strong>端口:</strong> 465 (SSL)</li>
+                <li>
+                  <strong>授权码:</strong> 在邮箱设置中开启 SMTP 服务
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <p class="text-xs text-gray-500 text-center">
+            💡 遇到问题？关于服务端部署、API接口定义及常见报错排查，请访问
+            <a
+              href="https://github.com/mhrealm/turbo-mail-sender"
+              target="_blank"
+              class="text-indigo-600 hover:underline">GitHub 仓库</a
+            > 查看完整文档。
+          </p>
+        </div>
+      </div>
+    </section>
+    <!-- PROMOTION BANNER -->
+    <section
+      class="my-8 md:mt-12 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 p-[1px] shadow-xl shadow-indigo-500/20"
+    >
+      <div
+        class="bg-white dark:bg-gray-900 rounded-[15px] p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-6"
+      >
+        <div class="flex items-center gap-4">
+          <div
+            class="hidden sm:flex w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-900/30 items-center justify-center flex-shrink-0"
+          >
+            <svg
+              class="w-6 h-6 text-indigo-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+              ></path></svg
+            >
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900 dark:text-white">
+              喜欢这个开源工具吗？
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+              你的 Star 是对我持续开发的最大鼓励！点击右侧按钮前往 GitHub
+              支持我。
+            </p>
+          </div>
+        </div>
+        <a
+          href="https://github.com/mhrealm/turbo-mail-sender"
+          target="_blank"
+          class="group relative flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold transition-all hover:scale-105 hover:shadow-lg active:scale-95 whitespace-nowrap overflow-hidden"
         >
-            <div
-                class="bg-white dark:bg-gray-900 rounded-[15px] p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-6"
-            >
-                <div class="flex items-center gap-4">
-                    <div
-                        class="hidden sm:flex w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-900/30 items-center justify-center flex-shrink-0"
-                    >
-                        <svg
-                            class="w-6 h-6 text-indigo-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            ><path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.783.57-1.838-.197-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                            ></path></svg
-                        >
-                    </div>
-                    <div>
-                        <h3
-                            class="text-base font-bold text-gray-900 dark:text-white"
-                        >
-                            喜欢这个开源工具吗？
-                        </h3>
-                        <p
-                            class="text-sm text-gray-500 dark:text-gray-400 mt-0.5"
-                        >
-                            你的 Star 是对我持续开发的最大鼓励！点击右侧按钮前往
-                            GitHub 支持我。
-                        </p>
-                    </div>
-                </div>
-                <a
-                    href="https://github.com/ErpanOmer/turbo-mail-sender"
-                    target="_blank"
-                    class="group relative flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-bold transition-all hover:scale-105 hover:shadow-lg active:scale-95 whitespace-nowrap overflow-hidden"
-                >
-                    <div
-                        class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity"
-                    >
-                    </div>
-                    <svg
-                        class="w-5 h-5 text-yellow-400 fill-current"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                        ></path>
-                    </svg>
-                    <span>Give me a Star</span>
-                    <svg
-                        class="w-4 h-4 opacity-70 group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        ><path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg
-                    >
-                </a>
-            </div>
-        </section>
-    </div>
+          <div
+            class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 opacity-0 group-hover:opacity-10 transition-opacity"
+          >
+          </div>
+          <svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 24 24">
+            <path
+              d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+            ></path>
+          </svg>
+          <span>Give me a Star</span>
+          <svg
+            class="w-4 h-4 opacity-70 group-hover:translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg
+          >
+        </a>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
 
 <script>
-    import Quill from "quill";
+  import Quill from "quill";
 
-    // === Global Config Key ===
-    const CONFIG_KEY = "turbo_mailer_config_v2";
+  // === Global Config Key ===
+  const CONFIG_KEY = "turbo_mailer_config_v2";
 
-    // === Logic ===
-    document.addEventListener("astro:page-load", () => {
-        initTool();
+  // === Logic ===
+  document.addEventListener("astro:page-load", () => {
+    initTool();
+  });
+
+  // Fallback for initial load if view transitions not used or failed
+  if (document.readyState === "complete") {
+    initTool();
+  } else {
+    document.addEventListener("DOMContentLoaded", initTool);
+  }
+
+  function initTool() {
+    const editorContainer = document.getElementById("editor-container");
+    if (!editorContainer) return; // Not on this page
+    if (editorContainer.dataset.initialized) return; // Already init
+    editorContainer.dataset.initialized = "true";
+
+    // 1. Init Quill
+    const quill = new Quill("#editor-container", {
+      theme: "snow",
+      placeholder: "在此撰写邮件正文...",
+      modules: {
+        toolbar: [
+          ["bold", "italic", "underline", "strike"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          [{ header: [1, 2, 3, false] }],
+          ["link", "clean"],
+        ],
+      },
     });
 
-    // Fallback for initial load if view transitions not used or failed
-    if (document.readyState === "complete") {
-        initTool();
-    } else {
-        document.addEventListener("DOMContentLoaded", initTool);
+    // 2. Load Config from LocalStorage
+    const cachedConfig = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
+    const fieldConfigs = {
+      smtpHost: { cacheKey: "smtpHost", defaultVal: "smtp.qq.com" },
+      smtpPort: { cacheKey: "smtpPort", defaultVal: "465" },
+      senderEmail: { cacheKey: "senderEmail", defaultVal: "" },
+      apiBaseUrl: {
+        cacheKey: "apiBaseUrl",
+        defaultVal: "https://example.com",
+      },
+    };
+
+    Object.entries(fieldConfigs).forEach(([id, config]) => {
+      const el = document.getElementById(id) as HTMLInputElement;
+      if (!el) return;
+      el.value = (cachedConfig as any)[config.cacheKey] || config.defaultVal;
+    });
+
+    if (cachedConfig.senderPass) {
+      const passEl = document.getElementById("senderPass") as HTMLInputElement;
+      if (passEl) passEl.value = cachedConfig.senderPass;
     }
 
-    function initTool() {
-        const editorContainer = document.getElementById("editor-container");
-        if (!editorContainer) return; // Not on this page
-        if (editorContainer.dataset.initialized) return; // Already init
-        editorContainer.dataset.initialized = "true";
+    // 3. Event Listeners
+    document
+      .getElementById("recipientList")
+      ?.addEventListener("input", updateCount);
+    document
+      .getElementById("importBtn")
+      ?.addEventListener("click", () =>
+        document.getElementById("csvInput")?.click(),
+      );
+    document
+      .getElementById("csvInput")
+      ?.addEventListener("change", (e) => handleCsv(e));
+    document
+      .getElementById("sendBtn")
+      ?.addEventListener("click", startBatchSend);
+    document
+      .getElementById("checkConnBtn")
+      ?.addEventListener("click", checkConnection);
+    document
+      .getElementById("exportBtn")
+      ?.addEventListener("click", downloadResults);
 
-        // 1. Init Quill
-        const quill = new Quill("#editor-container", {
-            theme: "snow",
-            placeholder: "在此撰写邮件正文...",
-            modules: {
-                toolbar: [
-                    ["bold", "italic", "underline", "strike"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    [{ header: [1, 2, 3, false] }],
-                    ["link", "clean"],
-                ],
-            },
-        });
+    // Helper Vars
+    let monitorTimer: any = null;
+    let initialTotal = 0;
 
-        // 2. Load Config from LocalStorage
-        const cachedConfig = JSON.parse(
-            localStorage.getItem(CONFIG_KEY) || "{}",
+    function getBaseUrl() {
+      return (
+        document.getElementById("apiBaseUrl") as HTMLInputElement
+      ).value.replace(/\/$/, "");
+    }
+
+    async function checkConnection() {
+      const statusEl = document.getElementById("connectionStatus");
+      const url = getBaseUrl();
+      if (!statusEl) return;
+
+      statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-yellow-400 mr-2 animate-pulse"></span> ⏳ 连接中...`;
+      statusEl.className =
+        "inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500 text-xs font-bold shadow-sm border border-yellow-200 dark:border-yellow-900/30";
+
+      try {
+        const res = await fetch(`${url}/queue-status`);
+        if (res.ok) {
+          statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span> 已连接`;
+          statusEl.className =
+            "inline-flex items-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold shadow-sm border border-green-200 dark:border-green-800/30";
+          addLog("已连接到服务端: " + url, "success");
+        } else {
+          throw new Error("Stats not 200");
+        }
+      } catch (e) {
+        statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span> 连接失败`;
+        statusEl.className =
+          "inline-flex items-center px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs font-bold shadow-sm border border-red-200 dark:border-red-900/30";
+        addLog("连接失败，请检查服务是否启动: " + url, "error");
+      }
+    }
+
+    function updateCount() {
+      const el = document.getElementById(
+        "recipientList",
+      ) as HTMLTextAreaElement;
+      const text = el.value || "";
+      const emails =
+        text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi) || [];
+      const countEl = document.getElementById("recipientCount");
+      if (countEl) countEl.innerText = `${emails.length} 人`;
+      return emails;
+    }
+
+    function handleCsv(event: Event) {
+      const input = event.target as HTMLInputElement;
+      const file = input.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        const emails = text.match(
+          /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi,
         );
-        const fieldConfigs = {
-            smtpHost: { cacheKey: "smtpHost", defaultVal: "smtp.qq.com" },
-            smtpPort: { cacheKey: "smtpPort", defaultVal: "465" },
-            senderEmail: { cacheKey: "senderEmail", defaultVal: "" },
-            apiBaseUrl: {
-                cacheKey: "apiBaseUrl",
-                defaultVal: "https://example.com",
-            },
-        };
+        const recipientListEl = document.getElementById(
+          "recipientList",
+        ) as HTMLTextAreaElement;
+        if (emails && recipientListEl) {
+          const unique = [...new Set(emails)];
+          recipientListEl.value = unique.join("\\n");
+          updateCount();
+          addLog(`已导入 ${unique.length} 个邮箱`, "cmd");
+        } else {
+          alert("未找到有效邮箱");
+        }
+      };
+      reader.readAsText(file);
+      input.value = "";
+    }
 
-        Object.entries(fieldConfigs).forEach(([id, config]) => {
-            const el = document.getElementById(id) as HTMLInputElement;
-            if (!el) return;
-            el.value =
-                (cachedConfig as any)[config.cacheKey] || config.defaultVal;
+    async function startBatchSend() {
+      const host = (
+        document.getElementById("smtpHost") as HTMLInputElement
+      ).value.trim();
+      const port = (
+        document.getElementById("smtpPort") as HTMLInputElement
+      ).value.trim();
+      const user = (
+        document.getElementById("senderEmail") as HTMLInputElement
+      ).value.trim();
+      const pass = (
+        document.getElementById("senderPass") as HTMLInputElement
+      ).value.trim();
+      const subject = (
+        document.getElementById("mailSubject") as HTMLInputElement
+      ).value.trim();
+      const html = quill.root.innerHTML;
+      const configDelay =
+        parseInt(
+          (document.getElementById("cfgDelay") as HTMLInputElement).value,
+        ) || 1000;
+      const configRetries =
+        parseInt(
+          (document.getElementById("cfgMaxRetries") as HTMLInputElement).value,
+        ) || 3;
+      const baseUrl = getBaseUrl();
+
+      if (!host || !port || !user || !pass || !subject)
+        return alert("请补全所有配置项");
+
+      const emails = updateCount();
+      const uniqueEmails = [...new Set(emails)];
+      if (uniqueEmails.length === 0) return alert("收件人列表为空");
+
+      // Save Config
+      const config: any = {
+        smtpHost: host,
+        smtpPort: port,
+        senderEmail: user,
+        senderPass: pass,
+        apiBaseUrl: baseUrl,
+      };
+      localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+
+      const btn = document.getElementById("sendBtn") as HTMLButtonElement;
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin mr-2">↻</span> 提交中...`;
+
+      addLog(`正在提交 ${uniqueEmails.length} 个任务...`, "info");
+
+      try {
+        const res = await fetch(`${baseUrl}/send-mail-batch`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            host,
+            port,
+            user,
+            pass,
+            recipients: uniqueEmails,
+            subject,
+            html,
+            clientConfig: {
+              perSendDelay: configDelay,
+              maxRetries: configRetries,
+            },
+          }),
         });
 
-        if (cachedConfig.senderPass) {
-            const passEl = document.getElementById(
-                "senderPass",
-            ) as HTMLInputElement;
-            if (passEl) passEl.value = cachedConfig.senderPass;
+        const data = await res.json();
+        if (data.success) {
+          initialTotal = uniqueEmails.length;
+          addLog(`✅ 成功入队 ${data.total} 个任务`, "success");
+          btn.innerHTML = `正在发送... (0/${initialTotal})`;
+          if (!monitorTimer) monitorProgress(baseUrl);
+        } else {
+          throw new Error(data.message || "提交失败");
         }
+      } catch (err: any) {
+        addLog(`提交失败: ${err.message}`, "error");
+        btn.disabled = false;
+        btn.innerHTML = "🚀 START MISSION";
+      }
+    }
 
-        // 3. Event Listeners
-        document
-            .getElementById("recipientList")
-            ?.addEventListener("input", updateCount);
-        document
-            .getElementById("importBtn")
-            ?.addEventListener("click", () =>
-                document.getElementById("csvInput")?.click(),
-            );
-        document
-            .getElementById("csvInput")
-            ?.addEventListener("change", (e) => handleCsv(e));
-        document
-            .getElementById("sendBtn")
-            ?.addEventListener("click", startBatchSend);
-        document
-            .getElementById("checkConnBtn")
-            ?.addEventListener("click", checkConnection);
-        document
-            .getElementById("exportBtn")
-            ?.addEventListener("click", downloadResults);
+    function monitorProgress(baseUrl: string) {
+      monitorTimer = setInterval(async () => {
+        try {
+          const res = await fetch(`${baseUrl}/queue-status`);
+          const data = await res.json();
+          if (data.success) {
+            const { queueLength, running, totalProcessed } = data;
+            document.getElementById("statQueue")!.innerText = queueLength;
+            document.getElementById("statRunning")!.innerText = running;
+            document.getElementById("statDone")!.innerText = totalProcessed;
 
-        // Helper Vars
-        let monitorTimer: any = null;
-        let initialTotal = 0;
+            let p =
+              initialTotal > 0
+                ? Math.round((totalProcessed / initialTotal) * 100)
+                : 0;
+            if (p > 100 && queueLength > 0) p = 99;
+            if (queueLength === 0 && running === 0) p = 100;
 
-        function getBaseUrl() {
-            return (
-                document.getElementById("apiBaseUrl") as HTMLInputElement
-            ).value.replace(/\/$/, "");
-        }
-
-        async function checkConnection() {
-            const statusEl = document.getElementById("connectionStatus");
-            const url = getBaseUrl();
-            if (!statusEl) return;
-
-            statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-yellow-400 mr-2 animate-pulse"></span> ⏳ 连接中...`;
-            statusEl.className =
-                "inline-flex items-center px-3 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-500 text-xs font-bold shadow-sm border border-yellow-200 dark:border-yellow-900/30";
-
-            try {
-                const res = await fetch(`${url}/queue-status`);
-                if (res.ok) {
-                    statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-500 mr-2 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span> 已连接`;
-                    statusEl.className =
-                        "inline-flex items-center px-3 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold shadow-sm border border-green-200 dark:border-green-800/30";
-                    addLog("已连接到服务端: " + url, "success");
-                } else {
-                    throw new Error("Stats not 200");
-                }
-            } catch (e) {
-                statusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span> 连接失败`;
-                statusEl.className =
-                    "inline-flex items-center px-3 py-1 rounded-full bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-xs font-bold shadow-sm border border-red-200 dark:border-red-900/30";
-                addLog("连接失败，请检查服务是否启动: " + url, "error");
-            }
-        }
-
-        function updateCount() {
-            const el = document.getElementById(
-                "recipientList",
-            ) as HTMLTextAreaElement;
-            const text = el.value || "";
-            const emails =
-                text.match(
-                    /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi,
-                ) || [];
-            const countEl = document.getElementById("recipientCount");
-            if (countEl) countEl.innerText = `${emails.length} 人`;
-            return emails;
-        }
-
-        function handleCsv(event: Event) {
-            const input = event.target as HTMLInputElement;
-            const file = input.files?.[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const text = e.target?.result as string;
-                const emails = text.match(
-                    /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/gi,
-                );
-                const recipientListEl = document.getElementById(
-                    "recipientList",
-                ) as HTMLTextAreaElement;
-                if (emails && recipientListEl) {
-                    const unique = [...new Set(emails)];
-                    recipientListEl.value = unique.join("\\n");
-                    updateCount();
-                    addLog(`已导入 ${unique.length} 个邮箱`, "cmd");
-                } else {
-                    alert("未找到有效邮箱");
-                }
-            };
-            reader.readAsText(file);
-            input.value = "";
-        }
-
-        async function startBatchSend() {
-            const host = (
-                document.getElementById("smtpHost") as HTMLInputElement
-            ).value.trim();
-            const port = (
-                document.getElementById("smtpPort") as HTMLInputElement
-            ).value.trim();
-            const user = (
-                document.getElementById("senderEmail") as HTMLInputElement
-            ).value.trim();
-            const pass = (
-                document.getElementById("senderPass") as HTMLInputElement
-            ).value.trim();
-            const subject = (
-                document.getElementById("mailSubject") as HTMLInputElement
-            ).value.trim();
-            const html = quill.root.innerHTML;
-            const configDelay =
-                parseInt(
-                    (document.getElementById("cfgDelay") as HTMLInputElement)
-                        .value,
-                ) || 1000;
-            const configRetries =
-                parseInt(
-                    (
-                        document.getElementById(
-                            "cfgMaxRetries",
-                        ) as HTMLInputElement
-                    ).value,
-                ) || 3;
-            const baseUrl = getBaseUrl();
-
-            if (!host || !port || !user || !pass || !subject)
-                return alert("请补全所有配置项");
-
-            const emails = updateCount();
-            const uniqueEmails = [...new Set(emails)];
-            if (uniqueEmails.length === 0) return alert("收件人列表为空");
-
-            // Save Config
-            const config: any = {
-                smtpHost: host,
-                smtpPort: port,
-                senderEmail: user,
-                senderPass: pass,
-                apiBaseUrl: baseUrl,
-            };
-            localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
+            (
+              document.getElementById("progressBar") as HTMLElement
+            ).style.width = p + "%";
+            document.getElementById("progressPercent")!.innerText = p + "%";
 
             const btn = document.getElementById("sendBtn") as HTMLButtonElement;
-            btn.disabled = true;
-            btn.innerHTML = `<span class="inline-block animate-spin mr-2">↻</span> 提交中...`;
+            if (p < 100)
+              btn.innerHTML = `正在发送... (${totalProcessed}/${initialTotal})`;
 
-            addLog(`正在提交 ${uniqueEmails.length} 个任务...`, "info");
+            if (
+              queueLength === 0 &&
+              running === 0 &&
+              totalProcessed >= initialTotal &&
+              initialTotal > 0
+            ) {
+              clearInterval(monitorTimer);
+              monitorTimer = null;
+              addLog("🎉 所有任务处理完毕", "success");
 
-            try {
-                const res = await fetch(`${baseUrl}/send-mail-batch`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        host,
-                        port,
-                        user,
-                        pass,
-                        recipients: uniqueEmails,
-                        subject,
-                        html,
-                        clientConfig: {
-                            perSendDelay: configDelay,
-                            maxRetries: configRetries,
-                        },
-                    }),
-                });
+              // Reset inputs
+              (
+                document.getElementById("recipientList") as HTMLTextAreaElement
+              ).value = "";
+              (
+                document.getElementById("mailSubject") as HTMLInputElement
+              ).value = "";
+              quill.setText("");
+              updateCount();
 
-                const data = await res.json();
-                if (data.success) {
-                    initialTotal = uniqueEmails.length;
-                    addLog(`✅ 成功入队 ${data.total} 个任务`, "success");
-                    btn.innerHTML = `正在发送... (0/${initialTotal})`;
-                    if (!monitorTimer) monitorProgress(baseUrl);
-                } else {
-                    throw new Error(data.message || "提交失败");
-                }
-            } catch (err: any) {
-                addLog(`提交失败: ${err.message}`, "error");
-                btn.disabled = false;
-                btn.innerHTML = "🚀 START MISSION";
+              btn.disabled = false;
+              btn.innerHTML = "🚀 START MISSION";
             }
+          }
+        } catch (e) {
+          console.error("Poll error", e);
         }
-
-        function monitorProgress(baseUrl: string) {
-            monitorTimer = setInterval(async () => {
-                try {
-                    const res = await fetch(`${baseUrl}/queue-status`);
-                    const data = await res.json();
-                    if (data.success) {
-                        const { queueLength, running, totalProcessed } = data;
-                        document.getElementById("statQueue")!.innerText =
-                            queueLength;
-                        document.getElementById("statRunning")!.innerText =
-                            running;
-                        document.getElementById("statDone")!.innerText =
-                            totalProcessed;
-
-                        let p =
-                            initialTotal > 0
-                                ? Math.round(
-                                      (totalProcessed / initialTotal) * 100,
-                                  )
-                                : 0;
-                        if (p > 100 && queueLength > 0) p = 99;
-                        if (queueLength === 0 && running === 0) p = 100;
-
-                        (
-                            document.getElementById(
-                                "progressBar",
-                            ) as HTMLElement
-                        ).style.width = p + "%";
-                        document.getElementById("progressPercent")!.innerText =
-                            p + "%";
-
-                        const btn = document.getElementById(
-                            "sendBtn",
-                        ) as HTMLButtonElement;
-                        if (p < 100)
-                            btn.innerHTML = `正在发送... (${totalProcessed}/${initialTotal})`;
-
-                        if (
-                            queueLength === 0 &&
-                            running === 0 &&
-                            totalProcessed >= initialTotal &&
-                            initialTotal > 0
-                        ) {
-                            clearInterval(monitorTimer);
-                            monitorTimer = null;
-                            addLog("🎉 所有任务处理完毕", "success");
-
-                            // Reset inputs
-                            (
-                                document.getElementById(
-                                    "recipientList",
-                                ) as HTMLTextAreaElement
-                            ).value = "";
-                            (
-                                document.getElementById(
-                                    "mailSubject",
-                                ) as HTMLInputElement
-                            ).value = "";
-                            quill.setText("");
-                            updateCount();
-
-                            btn.disabled = false;
-                            btn.innerHTML = "🚀 START MISSION";
-                        }
-                    }
-                } catch (e) {
-                    console.error("Poll error", e);
-                }
-            }, 1500);
-        }
-
-        function downloadResults() {
-            window.open(`${getBaseUrl()}/results`, "_blank");
-        }
-
-        function addLog(
-            msg: string,
-            type: "info" | "success" | "error" | "cmd",
-        ) {
-            const box = document.getElementById("logBox");
-            if (!box) return;
-            const colors: any = {
-                info: "#3b82f6",
-                success: "#10b981",
-                error: "#ef4444",
-                cmd: "#7c3aed",
-            };
-            const time = new Date().toLocaleTimeString("en-US", {
-                hour12: false,
-            });
-            const div = document.createElement("div");
-            div.style.color = colors[type] || "#3b82f6";
-            div.innerHTML = `<span style="opacity:.5">[${time}]</span> ${msg}`;
-            box.appendChild(div);
-            box.scrollTop = box.scrollHeight;
-            if (box.children.length > 500)
-                box.removeChild(box.firstChild as Node);
-        }
-
-        // Initial check if URL is pre-filled
-        const autoCheckUrl = (
-            document.getElementById("apiBaseUrl") as HTMLInputElement
-        ).value;
-        if (autoCheckUrl) checkConnection();
+      }, 1500);
     }
+
+    function downloadResults() {
+      window.open(`${getBaseUrl()}/results`, "_blank");
+    }
+
+    function addLog(msg: string, type: "info" | "success" | "error" | "cmd") {
+      const box = document.getElementById("logBox");
+      if (!box) return;
+      const colors: any = {
+        info: "#3b82f6",
+        success: "#10b981",
+        error: "#ef4444",
+        cmd: "#7c3aed",
+      };
+      const time = new Date().toLocaleTimeString("en-US", {
+        hour12: false,
+      });
+      const div = document.createElement("div");
+      div.style.color = colors[type] || "#3b82f6";
+      div.innerHTML = `<span style="opacity:.5">[${time}]</span> ${msg}`;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+      if (box.children.length > 500) box.removeChild(box.firstChild as Node);
+    }
+
+    // Initial check if URL is pre-filled
+    const autoCheckUrl = (
+      document.getElementById("apiBaseUrl") as HTMLInputElement
+    ).value;
+    if (autoCheckUrl) checkConnection();
+  }
 </script>
 
 <style>
-    /* Custom Scrollbar for log box */
-    #logBox::-webkit-scrollbar {
-        width: 6px;
-    }
-    #logBox::-webkit-scrollbar-track {
-        background: transparent;
-    }
-    #logBox::-webkit-scrollbar-thumb {
-        background-color: rgba(156, 163, 175, 0.5);
-        border-radius: 3px;
-    }
+  /* Custom Scrollbar for log box */
+  #logBox::-webkit-scrollbar {
+    width: 6px;
+  }
+  #logBox::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  #logBox::-webkit-scrollbar-thumb {
+    background-color: rgba(156, 163, 175, 0.5);
+    border-radius: 3px;
+  }
 
-    /* Animation util for log */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(6px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+  /* Animation util for log */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
     }
-    #logBox > div {
-        animation: fadeInUp 300ms ease forwards;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
+  }
+  #logBox > div {
+    animation: fadeInUp 300ms ease forwards;
+  }
 </style>
 
 <style is:global>
-    .ql-snow .ql-editor.ql-blank::before {
-        color: #999; /* placeholder 颜色 */
-    }
+  .ql-snow .ql-editor.ql-blank::before {
+    color: #999; /* placeholder 颜色 */
+  }
 
-    .ql-snow .ql-stroke {
-        stroke: #fff;
-    }
+  .ql-snow .ql-stroke {
+    stroke: #fff;
+  }
 
-    .ql-snow .ql-picker-label::before {
-        color: #fff;
-    }
+  .ql-snow .ql-picker-label::before {
+    color: #fff;
+  }
 
-    .ql-snow .ql-fill,
-    .ql-snow .ql-stroke.ql-fill {
-        fill: #fff;
-    }
+  .ql-snow .ql-fill,
+  .ql-snow .ql-stroke.ql-fill {
+    fill: #fff;
+  }
 
-    #editor-container {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-    }
+  #editor-container {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 
-    .ql-toolbar.ql-snow {
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-    }
+  .ql-toolbar.ql-snow {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
 </style>

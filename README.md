@@ -51,7 +51,7 @@
 ### 安装
 
 ```bash
-git clone https://github.com/ErpanOmer/erpanomer.github.io.git
+git clone https://github.com/mhrealm/erpanomer.github.io.git
 cd erpanomer.github.io
 npm install
 ```
@@ -300,7 +300,7 @@ node --version  # 确保是 20.x 或更高
 ## 📮 联系方式
 
 - **Email**: erpanomer@gmail.com
-- **GitHub**: [ErpanOmer](https://github.com/ErpanOmer)
+- **GitHub**: [ErpanOmer](https://github.com/mhrealm)
 - **Website**: [https://erpanomer.nurverse.com](https://erpanomer.nurverse.com)
 
 ## 🙏 致谢

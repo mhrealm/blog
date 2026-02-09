@@ -1,12 +1,11 @@
 ---
-import { Font } from "astro:assets";
-import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
-import BackToTop from "@/components/BackToTop.astro";
-import { getCldImageUrl } from "astro-cloudinary/helpers";
-import me from "@/images/me.jpg";
 import "@/app.css";
+import BackToTop from "@/components/BackToTop.astro";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import me from "@/images/me.jpg";
 import { CldOgImage } from "astro-cloudinary";
+import { getCldImageUrl } from "astro-cloudinary/helpers";
 
 const { env } = Astro.locals.runtime || {};
 
@@ -157,8 +156,8 @@ const viewCount = Astro.locals.viewCount || 0;
             height: 500,
           }),
           sameAs: [
-            "https://github.com/ErpanOmer",
-            "https://juejin.cn/user/3878732754331096",
+            "https://github.com/mhrealm",
+            "https://juejin.cn/user/712139267641950",
           ],
           jobTitle: "Web Frontend Engineer",
           description: description,
