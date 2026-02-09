@@ -12,14 +12,14 @@ import { remarkReadingTime } from './remark-reading-time.mjs';
 export default defineConfig({
   site: 'https://erpanomer.nurverse.com',
   base: '/',
-  // SSR Mode
-  output: 'server',
+  output: 'static',  // 静态输出  GitHub Pages 不支持 SSR
 
   // Use 'compile' service to optimize static images at build time
   // This works even in SSR mode for assets known at build time
-  adapter: cloudflare({
-    imageService: 'passthrough',
-  }),
+  // adapter: cloudflare({
+  //   imageService: 'passthrough',
+  // }),
+  
   image: {
     service: passthroughImageService()
   },
@@ -44,7 +44,7 @@ export default defineConfig({
   },
 
   server: {
-    open: true
+    open: true // 启动开发服务器时自动打开浏览器
   },
   markdown: {
     remarkPlugins: [remarkModifiedTime, remarkReadingTime],
