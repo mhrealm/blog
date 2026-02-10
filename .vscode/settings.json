@@ -8,6 +8,7 @@
   "editor.formatOnSave": true, // 保存时格式化
   "prettier.printWidth": 100, //最大行宽为 100
   "prettier.htmlWhitespaceSensitivity": "ignore",
+  "editor.unicodeHighlight.ambiguousCharacters": false, // 禁用对可能引起混淆的字符的高亮
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"

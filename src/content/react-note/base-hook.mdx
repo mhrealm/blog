@@ -1,0 +1,356 @@
+---
+title: "React Hook 入门"
+description: "深入理解 React 中的 Hook，包括基本用法、高级技巧和最佳实践"
+author: "Mh"
+pubDate: 2023-10-01
+lastModified: 2023-10-01
+tags: ["react", "hooks", "useState"]
+draft: false
+---
+
+# useEffect 介绍
+
+[官方解释：useEffect 是一个 React 钩子，可以让你 将组件与外部系统同步。](https://react.nodejs.cn/reference/react/useEffect)
+
+个人理解：useEffect 是一个重要的 hook ，可以实现函数组件中执行各种副作用操作，（比如：发送网络请求，手动变更 DOM，记录日志等）
+
+### 语法
+
+1. setup 是一个执行函数。
+2. dependencies 是依赖项，是可选的。
+
+当不传 dependencies 依赖项时，组件每次渲染都会导致 setup 函数的重新执行。当 dependencies 是一个空数组的时候，在组件渲染完成后会执行 setup 函数。当 dependencies 中存在依赖项时，组件第一次渲染会和依赖项发生改变都会执行 setup 函数。
+
+```js
+useEffect(setup, dependencies?)
+```
+
+### 用法
+
+#### 1.useEffect 分别模拟了类组件中的哪些生命周期?
+
+1.1 将 useEffect 的依赖项设置成一个空数组，这个时候 useEffect 相当于类组件中的 componentDidMount ，在组件挂载之后执行。
+
+```js
+useEffect(() => {
+  // 相当于 componentDidMount 中的代码
+  console.log("组件挂载后执行");
+}, []);
+```
+
+1.2 将 useEffect 的依赖项设置成监听的变量，这个时候 useEffect 相当于类组件中的 componentDidUpdate ，在组件的依赖值发生改变时执行。
+
+```js
+const Simulation = () => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    // 相当于 componentDidUpdate 中的代码，当 count 变化时执行
+    console.log(`count 更新为: ${count}`);
+  }, [count]);
+
+  return (
+    <div className="box">
+      <button onChange={() => setCount((a) => a + 1)}>计数器:{count}</button>
+    </div>
+  );
+};
+```
+
+1.3 将 useEffect 中返回一个清理函数，相当于类组件中的 componentWillUnmount，组件卸载前执行。
+
+```js
+useEffect(() => {
+  // 组件挂载或更新时执行的代码
+  const timer = setInterval(() => {
+    console.log("每秒执行一次");
+  }, 1000);
+
+  // 返回一个清理函数，组件卸载前执行
+  return () => {
+    clearInterval(timer);
+    console.log("组件卸载，清除定时器");
+  };
+}, []);
+```
+
+#### 2.连接外部系统，控制模态对话框。
+
+接下来这个案例是关于使用 useEffect 连接外部系统，控制模态对话框的操作，先看代码。
+
+```js
+const ConnectionExternal = () => {
+  const ModalDialog = ({ isOpen, children }) => {
+    const ref = useRef();
+    useEffect(() => {
+      const dialog = ref.current;
+      if (!isOpen) {
+        return;
+      }
+      dialog.showModal();
+      return () => {
+        dialog.close();
+      };
+    }, [isOpen]);
+    return <dialog ref={ref}>{children}</dialog>;
+  };
+
+  const [show, setShow] = useState(false);
+
+  const openDialog = () => {
+    setShow(true);
+  };
+
+  const onClose = () => {
+    setShow(false);
+  };
+
+  return (
+    <div className="box">
+      <p>2.连接外部系统，控制模态对话框</p>
+      <button onClick={openDialog}>open dialog</button>
+      <ModalDialog isOpen={show}>
+        Hello!
+        <br />
+        <button onClick={onClose}>Close</button>
+      </ModalDialog>
+    </div>
+  );
+};
+```
+
+上面的案例中是通过父组件中一个 show 状态去控制子组件中模块框的显示和隐藏。ModalDialog 组件通过 useEffect 的副作用让 isOpen 属性控制到 showModal 方法和 close 方法的调用。
+
+#### 3.根据副作用的先前状态更新状态。
+
+一个常见的场景，在页面上设置一个计数的功能，每隔一秒钟让计数器 count 加 1，当然可以当 count 作为 useEffect 的依赖项，这也会导致每一次的 count 变化，useEffect 都会执行一次清理副作用和设置副作用的操作，例如：
+
+```js
+const BeforeStateUpdate = () => {
+  const [count, setCount] = useState(0);
+  // 第一种使用count作为副作用的依赖值
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCount(count + 1);
+    }, 1000);
+    return () => {
+      console.log("intervalId", intervalId);
+      clearInterval(intervalId);
+    };
+  }, [count]);
+
+  return (
+    <div className="box">
+      <div>状态：{count}</div>
+    </div>
+  );
+};
+```
+
+对于上面的 useEffect 的频繁操作并不是必要的，可以利用 set 函数的中传递一个更新函数去解决。
+
+```js
+const BeforeStateUpdate = () => {
+  const [count, setCount] = useState(0);
+
+  // 第二种不使用count作为副作用的依赖值
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCount((a) => a + 1);
+    }, 1000);
+    return () => {
+      console.log("intervalId", intervalId);
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  return (
+    <div className="box">
+      <div>状态：{count}</div>
+    </div>
+  );
+};
+```
+
+#### 4.避免将对象或者函数作为 useEffect 的依赖项。
+
+在 useEffect 的依赖项选择中，尽量避免使用对象或者函数作为依赖，当使用函数或者对象作为依赖项并在执行函数中去修改它，这样很有可能就会造成一种死循环，如下面这种。
+
+```js
+const NeedlessObjectRely = () => {
+  const [person, setPerson] = useState({
+    name: "zangsan",
+    sex: "man",
+  });
+
+  useEffect(() => {
+    // 🙅错误示范： Warning: Maximum update depth exceeded. This can happen when a component calls setState inside useEffect, but useEffect either doesn't have a dependency array, or one of the dependencies changes on every render.
+    setPerson({
+      ...person,
+      name: "lisi",
+    });
+  }, [person]);
+  return (
+    <div className="box">
+      <p> </p>
+      <div>姓名：{person.name}</div>
+    </div>
+  );
+};
+```
+
+如果你必要在 useEffect 中去修改对象的属性，可以使用 set 函数时使用更新函数的形式。
+
+```js
+const NeedlessObjectRely = () => {
+  const [person, setPerson] = useState({
+    name: "zangsan",
+    sex: "man",
+  });
+
+  // 🙆正确做法
+  useEffect(() => {
+    setPerson((p) => {
+      return {
+        ...p,
+        name: "lisi",
+      };
+    });
+  }, []);
+  return (
+    <div className="box">
+      <p> </p>
+      <div>姓名：{person.name}</div>
+    </div>
+  );
+};
+```
+
+### 注意事项
+
+1. 检查副作用中的状态更新：如果副作用中执行了会导致组件重新渲染的状态更新，并且这个更新又触发了副作用的重新执行，就可能形成无限循环。
+
+2. 异步执行：useEffect 中的代码是异步执行的，即在组件渲染到屏幕之后执行。如果需要同步执行副作用（如立即更改 DOM 以避免闪屏），可能需要考虑使用 useLayoutEffect。 了解更多关于 useLayoutEffect 内容。
+
+3. 避免依赖项重复变化：如果组件的多个 props 或 state 同时变化，并且这些变化都会触发相同的副作用，应该考虑如何合并这些变化以减少副作用的执行次数。
+
+# useLayoutEffect 介绍
+
+[官方解释：useLayoutEffect 是 useEffect 的一个版本，它在浏览器重绘屏幕之前触发。](https://react.nodejs.cn/reference/react/useLayoutEffect)
+
+个人理解：useLayoutEffect 和 useEffect 都是处理副作用的 hook，区别是两者的执行时机不同。useLayoutEffect 用于在 DOM 更新完成后立即执行代码，但在浏览器绘制之前。
+
+### 语法
+
+1. setup：setup 是 useLayoutEffect 的设置函数，设置函数会在组件被添加到 DOM 之前执行，同时在设置函数中可以返回一个清理函数，清理函数执行时机是在每次依赖（dependencies）发生变化重新渲染后，react 会使用旧值运行清理函数，然后用新值运行你的设置函数，所以组件在从 DOM 删除之前，react 会设置你的清理函数。这也是定时器清理常见用法。
+
+2. dependencies：dependencies 是 setup 执行的依赖列表，dependencies 是可选的，用法和 useEffect 中 dependencies 的用法一直。
+
+```js
+useLayoutEffect(setup, dependencies?)
+```
+
+### 用法
+
+#### 1. useLayoutEffect 中设置函数和清理函数的区别？
+
+上面对于 setup 的介绍中已经阐述了设置函数和清理函数的区别，这里主要是通过代码验证上面的说法。
+
+```js
+const BasicUse = () => {
+  const [num, setNum] = useState(1);
+
+  useLayoutEffect(() => {
+    console.log("设置函数", num);
+    return () => {
+      console.log("清理函数", num);
+    };
+  }, [num]);
+
+  const onChange = () => {
+    setNum((a) => a + 1);
+  };
+
+  return (
+    <div className="box">
+      <p>1.useLayoutEffect中设置函数和清理函数的区别</p>
+      <button onClick={onChange}>点击加1</button>
+    </div>
+  );
+};
+```
+
+上面的代码中，当初始化渲染的时候只执行了设置函数，同时打印了 1，当每次点击加 1 的时候，清理函数的执行时机会在设置函数之前，同时清理函数中打印的依赖值是依赖值变化之前的值，而设置函数中打印的依赖值是依赖变化后的值。
+
+#### 2. useLayoutEffect 和 useEffect 用法对比？
+
+先看一个案例：
+
+```js
+const ElementPosition = () => {
+  const [isBig, setIsBig] = useState(false);
+  const handleClick = () => {
+    setIsBig(false);
+  };
+  // 人为减缓渲染速度
+  let now = performance.now();
+  while (performance.now() - now < 400) {}
+
+  useEffect(() => {
+    console.log("useEffect", isBig);
+    setIsBig(true);
+  }, [isBig]);
+
+  return (
+    <div className="box">
+      <p>1.useLayoutEffect和useEffect用法对比</p>
+      <div className={isBig ? "big" : "small"} />
+      <button onClick={handleClick}>变小</button>
+    </div>
+  );
+};
+```
+
+上面的代码中 isBig 变量初始化渲染的时候是 false，所以一开始的时候 div 是小的，当组件渲染完成后在 useEffect 中又改变了 isBig 的状态，这个时候 isBig 变成了 ture,由于 isBig 状态的改变导致 div 会被重新渲染，这里人为的减缓了渲染的速度，所以可以看到页面中的 div 是先变小后变大。当然你点击按钮手动的改变 isBig 的状态也是可以看到 div 是先变小后变大的过程。
+
+如果上面的代码变成 useLayoutEffect 会怎么样呢？
+
+```js
+const ElementPosition = () => {
+  const [isBig, setIsBig] = useState(false);
+  const handleClick = () => {
+    setIsBig(false);
+  };
+
+  // 人为减缓渲染速度
+  let now = performance.now();
+  while (performance.now() - now < 200) {}
+
+  useLayoutEffect(() => {
+    console.log("useLayoutEffect", isBig);
+    setIsBig(true);
+  }, [isBig]);
+
+  return (
+    <div className="box">
+      <p>2.useLayoutEffect和useEffect用法对比</p>
+      <div className={isBig ? "big" : "small"} />
+      <button onClick={handleClick}>变小</button>
+    </div>
+  );
+};
+```
+
+相同的操作，只是将 useEffect 变成 useLayoutEffect。神奇的一幕出现了，那就是无论是初始化渲染，还是点击按钮，页面中的 div 一直是大的，并没有变小，这是为什么呢？
+
+从 useLayoutEffect 的官方介绍中就可以看出，useLayoutEffect 的执行时机是屏幕绘制之前执行，所以在 useLayoutEffect 中更新状态会阻止浏览器重新绘制屏幕。结合上面的案例，当初始化渲染的时候 isBig 是 false，当浏览器还没有开始绘制 div 的时候，突然发现在 useLayoutEffect 中又重新设置了 isBig 的状态，所以浏览器会等待 isBig 的状态改变之后同步进行绘制，这导致了我们并不能在页面上看到 div 样式的改变。
+
+### 总结
+
+#### 1. useEffect 和 useLayoutEffect 的区别？
+
+1.1 执行时机不同：useEffect 的执行时机是在组件首次渲染和更新渲染之后异步执行的，这就意味着 useEffect 的执行并不会阻塞组件的渲染，也不会影响到用户的交互体验。相比之下，useLayoutEffect 的执行是在组件完成渲染之后，浏览器绘制之前同步执行的。这就意味着在 DOM 完成渲染之后，浏览器绘制之前执行的因此会阻塞浏览器的渲染。
+
+1.2 执行的时间点不同：useEffect 的执行是在组件渲染完成后的‘提交阶段’异步执行的，这就导致它并不会阻塞浏览器的绘制。同时这种异步的特性使得它在处理如数据获取、订阅事件等需要等待的副作用操作时非常有用。useLayoutEffect 的执行时间点是在组件的渲染完成后的‘布局阶段’执行的，同时在浏览器绘制屏幕之前同步执行的。所以它的副作用并不会引起渲染跳跃，可以提供更流畅的用户体验，如果在 useLayoutEffect 中操作非常耗时时，导致页面响应过慢，影响用户操作体验。
+
+1.3 应用场景不同：大多数的场景都是使用 useEffect，比如异步获取数据，组件卸载前清理订阅事件。useLayoutEffect 可以用于 DOM 更新后立即获取元素的尺寸和位置。

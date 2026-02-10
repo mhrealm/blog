@@ -15,6 +15,21 @@ const blog = defineCollection({
   }),
 });
 
+const functions = defineCollection({
+  type: "content",
+  schema: z.object({
+    author: z.string().default("Mh"),
+    lastModified: z.coerce.date(),
+    title: z.string(),
+    description: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    cover: z.string().optional(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+
 const reactnote = defineCollection({
   type: "content", // 显式指定类型
   schema: z.object({
@@ -44,4 +59,4 @@ const projects = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, "react-note": reactnote };
+export const collections = { blog, projects, "react-note": reactnote, functions };
