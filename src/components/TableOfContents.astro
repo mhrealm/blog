@@ -10,9 +10,7 @@ interface Heading {
 
 <nav class="toc-container mb-8 hidden lg:block">
   <div class="mb-4 border-b border-gh-border pb-2">
-    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider">
-      目录
-    </h3>
+    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider">目录</h3>
   </div>
 
   <ul
@@ -67,11 +65,9 @@ interface Heading {
       { rootMargin: "-100px 0px -66% 0px" },
     );
 
-    document
-      .querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4")
-      .forEach((section) => {
-        observer.observe(section);
-      });
+    document.querySelectorAll(".prose h1, .prose h2, .prose h3, .prose h4").forEach((section) => {
+      observer.observe(section);
+    });
 
     const tocList = document.getElementById("toc-list");
     const indicator = document.getElementById("toc-indicator");
@@ -79,9 +75,7 @@ interface Heading {
     function updateActive(id: string | null) {
       if (!id) return;
 
-      document
-        .querySelectorAll(".toc-item")
-        .forEach((item) => item.classList.remove("active"));
+      document.querySelectorAll(".toc-item").forEach((item) => item.classList.remove("active"));
 
       const activeLink = document.querySelector(`.toc-item[data-slug="${id}"]`);
       if (activeLink) {

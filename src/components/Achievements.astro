@@ -29,25 +29,19 @@ function formatCount(num: number): string {
 
 const stats = [
   {
-    value: juejinStats
-      ? `${formatCount(juejinStats.got_view_count)}+`
-      : "100w+",
+    value: juejinStats ? `${formatCount(juejinStats.got_view_count)}+` : "100w+",
     label: "阅读量",
     description: "掘金平台",
     icon: "📊",
   },
   {
-    value: juejinStats
-      ? `${formatCount(juejinStats.follower_count)}+`
-      : "3,000+",
+    value: juejinStats ? `${formatCount(juejinStats.follower_count)}+` : "3,000+",
     label: "粉丝",
     description: "持续增长中",
     icon: "👥",
   },
   {
-    value: juejinStats
-      ? `${formatCount(juejinStats.post_article_count)}+`
-      : "50+",
+    value: juejinStats ? `${formatCount(juejinStats.post_article_count)}+` : "50+",
     label: "技术文章",
     description: "原创分享",
     icon: "✍️",
@@ -70,9 +64,7 @@ const stats = [
 
 <div class="py-16 sm:py-20 lg:py-24">
   <div class="text-center mb-10 sm:mb-12">
-    <p
-      class="text-xs sm:text-sm font-medium text-indigo-400 uppercase tracking-widest mb-2"
-    >
+    <p class="text-xs sm:text-sm font-medium text-indigo-400 uppercase tracking-widest mb-2">
       Achievements
     </p>
     <h2 class="text-2xl sm:text-3xl font-bold text-white">成就与影响力</h2>
@@ -87,15 +79,11 @@ const stats = [
         <div class="group relative">
           <div class="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl blur opacity-0 group-hover:opacity-20 transition duration-500" />
           <div class="relative p-4 sm:p-6 bg-gh-surface rounded-xl border border-gh-border text-center group-hover:border-gh-muted transition-all duration-300">
-            <span class="text-2xl sm:text-3xl mb-2 sm:mb-3 block">
-              {stat.icon}
-            </span>
+            <span class="text-2xl sm:text-3xl mb-2 sm:mb-3 block">{stat.icon}</span>
             <div class="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-1">
               {stat.value}
             </div>
-            <div class="text-sm sm:text-base font-medium text-gh-text">
-              {stat.label}
-            </div>
+            <div class="text-sm sm:text-base font-medium text-gh-text">{stat.label}</div>
             <div class="text-xs text-gh-muted mt-0.5">{stat.description}</div>
           </div>
         </div>
@@ -121,7 +109,8 @@ const stats = [
           stroke-linecap="round"
           stroke-linejoin="round"
           d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-        ></path>
+        >
+        </path>
       </svg>
     </a>
   </div>

@@ -1,404 +1,370 @@
 ---
 interface Props {
-    slug: string;
-    vertical?: boolean;
+  slug: string;
+  vertical?: boolean;
 }
 
 const { slug, vertical = false } = Astro.props;
 ---
 
 <blog-stats
-    data-slug={slug}
-    class:list={[
-        "flex items-center not-prose",
-        vertical
-            ? "flex-col gap-4" // Desktop Vertical
-            : "fixed bottom-0 left-0 right-0 z-50 bg-[#0d1117]/80 backdrop-blur-xl border-t border-white/5 py-2 px-6 justify-around", // Mobile Fixed Bottom
-    ]}
+  data-slug={slug}
+  class:list={[
+    "flex items-center not-prose",
+    vertical
+      ? "flex-col gap-4" // Desktop Vertical
+      : "fixed bottom-0 left-0 right-0 z-50 bg-[#0d1117]/80 backdrop-blur-xl border-t border-white/5 py-2 px-6 justify-around", // Mobile Fixed Bottom
+  ]}
 >
-    <!-- Likes -->
-    <div
-        class:list={[
-            "flex items-center gap-1.5",
-            vertical ? "flex-col" : "flex-row",
-        ]}
-    >
-        <button
-            class="like-button group relative flex items-center justify-center rounded-full bg-white/5 border border-white/5 hover:border-red-500/30 hover:bg-red-500/10 transition-all duration-300 active:scale-95 touch-manipulation"
-            class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
-            title="Like this post"
-            aria-label="Like this post"
-        >
-            <div
-                class="absolute inset-0 rounded-full ring-0 ring-red-500/0 group-active:ring-4 group-active:ring-red-500/20 transition-all"
-            >
-            </div>
-            <!-- Heart Icon -->
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                class="text-gray-400 group-hover:text-red-500 transition-colors duration-300 like-icon"
-            >
-                <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path>
-            </svg>
-        </button>
-        <span
-            class="likes-count text-sm font-medium text-gray-400 animate-pulse rounded min-w-[20px] h-5 inline-flex items-center justify-center"
-        ></span>
-    </div>
-
-    <!-- Views -->
-    <div
-        class:list={[
-            "flex items-center gap-1.5",
-            vertical ? "flex-col" : "flex-row",
-        ]}
-    >
-        <div
-            class="flex items-center justify-center rounded-full bg-white/5 border border-white/5 text-gray-400 cursor-default"
-            class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
-            title="Total Views"
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="22"
-                height="22"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                ><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                ></path><circle cx="12" cy="12" r="3"></circle></svg
-            >
-        </div>
-        <span
-            class="views-count text-sm font-medium text-gray-400 animate-pulse rounded min-w-[24px] h-5 inline-flex items-center justify-center"
-        ></span>
-    </div>
-
-    <!-- Share -->
+  <!-- Likes -->
+  <div class:list={["flex items-center gap-1.5", vertical ? "flex-col" : "flex-row"]}>
     <button
-        class="share-button group relative flex items-center justify-center rounded-full bg-white/5 border border-white/5 hover:border-indigo-500/30 hover:bg-indigo-500/10 transition-all duration-300 active:scale-95 touch-manipulation"
-        class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
-        title="Share this post"
-        aria-label="Share this post"
+      class="like-button group relative flex items-center justify-center rounded-full bg-white/5 border border-white/5 hover:border-red-500/30 hover:bg-red-500/10 transition-all duration-300 active:scale-95 touch-manipulation"
+      class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
+      title="Like this post"
+      aria-label="Like this post"
     >
-        <div
-            class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] py-1 px-2 rounded opacity-0 pointer-events-none transition-opacity duration-300"
-            id="share-tooltip"
+      <div
+        class="absolute inset-0 rounded-full ring-0 ring-red-500/0 group-active:ring-4 group-active:ring-red-500/20 transition-all"
+      >
+      </div>
+      <!-- Heart Icon -->
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        class="text-gray-400 group-hover:text-red-500 transition-colors duration-300 like-icon"
+      >
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
         >
-            Copied!
-        </div>
-
-        <!-- Default Icon -->
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="share-icon text-gray-400 group-hover:text-indigo-400 transition-all duration-300 scale-100 rotate-0"
-            ><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"
-            ></circle><circle cx="18" cy="19" r="3"></circle><line
-                x1="8.59"
-                x2="15.42"
-                y1="13.51"
-                y2="17.49"></line><line
-                x1="15.41"
-                x2="8.59"
-                y1="6.51"
-                y2="10.49"></line></svg
-        >
-
-        <!-- Success Icon (Hidden initially) -->
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="22"
-            height="22"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="check-icon absolute text-green-500 transition-all duration-300 scale-0 rotate-90 opacity-0"
-            ><polyline points="20 6 9 17 4 12"></polyline></svg
-        >
+        </path>
+      </svg>
     </button>
+    <span
+      class="likes-count text-sm font-medium text-gray-400 animate-pulse rounded min-w-[20px] h-5 inline-flex items-center justify-center"
+    >
+    </span>
+  </div>
+
+  <!-- Views -->
+  <div class:list={["flex items-center gap-1.5", vertical ? "flex-col" : "flex-row"]}>
+    <div
+      class="flex items-center justify-center rounded-full bg-white/5 border border-white/5 text-gray-400 cursor-default"
+      class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
+      title="Total Views"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle
+          cx="12"
+          cy="12"
+          r="3"
+        >
+        </circle>
+      </svg>
+    </div>
+    <span
+      class="views-count text-sm font-medium text-gray-400 animate-pulse rounded min-w-[24px] h-5 inline-flex items-center justify-center"
+    >
+    </span>
+  </div>
+
+  <!-- Share -->
+  <button
+    class="share-button group relative flex items-center justify-center rounded-full bg-white/5 border border-white/5 hover:border-indigo-500/30 hover:bg-indigo-500/10 transition-all duration-300 active:scale-95 touch-manipulation"
+    class:list={[vertical ? "w-12 h-12" : "w-10 h-10"]}
+    title="Share this post"
+    aria-label="Share this post"
+  >
+    <div
+      class="absolute -top-8 left-1/2 -translate-x-1/2 bg-black/80 text-white text-[10px] py-1 px-2 rounded opacity-0 pointer-events-none transition-opacity duration-300"
+      id="share-tooltip"
+    >
+      Copied!
+    </div>
+
+    <!-- Default Icon -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="share-icon text-gray-400 group-hover:text-indigo-400 transition-all duration-300 scale-100 rotate-0"
+    >
+      <circle
+        cx="18"
+        cy="5"
+        r="3"
+      >
+      </circle><circle
+        cx="6"
+        cy="12"
+        r="3"
+      >
+      </circle><circle
+        cx="18"
+        cy="19"
+        r="3"
+      >
+      </circle><line
+        x1="8.59"
+        x2="15.42"
+        y1="13.51"
+        y2="17.49"
+      >
+      </line><line
+        x1="15.41"
+        x2="8.59"
+        y1="6.51"
+        y2="10.49"
+      >
+      </line>
+    </svg>
+
+    <!-- Success Icon (Hidden initially) -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="check-icon absolute text-green-500 transition-all duration-300 scale-0 rotate-90 opacity-0"
+    >
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </button>
 </blog-stats>
 
 <style>
-    /* Liked State Styles */
-    .like-button.is-liked {
-        @apply border-red-500/50 bg-red-500/10 cursor-default;
-    }
-    .like-button.is-liked .like-icon {
-        @apply text-red-500 fill-current;
-    }
+  /* Liked State Styles */
+  .like-button.is-liked {
+    @apply border-red-500/50 bg-red-500/10 cursor-default;
+  }
+  .like-button.is-liked .like-icon {
+    @apply text-red-500 fill-current;
+  }
 </style>
 
 <script>
-    import debounce from "lodash-es/debounce";
-    // Track viewed slugs globally to prevent duplicates per session
-    const countedViews = new Set<string>();
+  import debounce from "lodash-es/debounce";
+  // Track viewed slugs globally to prevent duplicates per session
+  const countedViews = new Set<string>();
 
-    class BlogStats extends HTMLElement {
-        private observer: IntersectionObserver | null = null;
-        private slug: string | undefined;
-        private viewTimer: number | undefined;
-        private hasFetchedStats = false;
+  class BlogStats extends HTMLElement {
+    private observer: IntersectionObserver | null = null;
+    private slug: string | undefined;
+    private viewTimer: number | undefined;
+    private hasFetchedStats = false;
 
-        constructor() {
-            super();
-            this.slug = this.dataset.slug;
-        }
-
-        connectedCallback() {
-            if (!this.slug) return;
-
-            this.observer = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            // 1. Lazy Load Stats (GET) - Only once
-                            if (!this.hasFetchedStats) {
-                                this.fetchStats();
-                                this.hasFetchedStats = true;
-                                // Initialize event listeners once
-                                this.initInteractive();
-                            }
-
-                            // 2. Start View Timer (POST) - "Time on screen" check
-                            if (
-                                !countedViews.has(this.slug!) &&
-                                !this.viewTimer
-                            ) {
-                                this.viewTimer = window.setTimeout(() => {
-                                    this.registerView();
-                                }, 2000); // Only count if visible for 2s
-                            }
-                        } else {
-                            // User scrolled away - Cancel view count
-                            if (this.viewTimer) {
-                                clearTimeout(this.viewTimer);
-                                this.viewTimer = undefined;
-                            }
-                        }
-                    });
-                },
-                { threshold: 0.5 },
-            ); // Require 50% visibility
-
-            this.observer.observe(this);
-        }
-
-        disconnectedCallback() {
-            if (this.viewTimer) clearTimeout(this.viewTimer);
-            this.observer?.disconnect();
-        }
-
-        async fetchStats() {
-            if (!this.slug) return;
-            try {
-                const res = await fetch(`/api/stats/${this.slug}`);
-                if (res.ok) {
-                    const data = await res.json();
-                    this.updateUI(data);
-                }
-            } catch (e) {
-                console.error("Failed to load stats", e);
-            }
-        }
-
-        async registerView() {
-            if (!this.slug || countedViews.has(this.slug)) return;
-
-            countedViews.add(this.slug);
-            this.viewTimer = undefined; // Clear timer ref
-
-            try {
-                const res = await fetch(`/api/stats/${this.slug}`, {
-                    method: "POST",
-                    body: JSON.stringify({ type: "view" }),
-                    headers: { "Content-Type": "application/json" },
-                });
-                const data = await res.json();
-                this.updateUI(data);
-
-                // We can stop observing now as view is counted
-                this.observer?.disconnect();
-            } catch (e) {
-                // Ignore errors
-            }
-        }
-
-        updateUI(data: {
-            views: number;
-            likes: number;
-            userHasLiked: boolean;
-        }) {
-            const viewsEl = this.querySelector(".views-count");
-            const likesEl = this.querySelector(".likes-count");
-            const likeBtn = this.querySelector(".like-button");
-
-            if (viewsEl) {
-                viewsEl.textContent = data.views.toLocaleString();
-                viewsEl.classList.remove("animate-pulse", "bg-white/5");
-            }
-            if (likesEl) {
-                likesEl.textContent = data.likes.toLocaleString();
-                likesEl.classList.remove("animate-pulse", "bg-white/5");
-            }
-            if (data.userHasLiked) {
-                likeBtn?.classList.add("is-liked");
-                if (likeBtn) (likeBtn as HTMLButtonElement).disabled = true;
-            }
-        }
-
-        initInteractive() {
-            const likeBtn = this.querySelector(".like-button");
-            const likesEl = this.querySelector(".likes-count");
-            const shareBtn = this.querySelector(".share-button");
-            const shareIcon = this.querySelector(".share-icon");
-            const checkIcon = this.querySelector(".check-icon");
-            const tooltip = this.querySelector("#share-tooltip");
-
-            // Like Interaction
-            likeBtn?.addEventListener(
-                "click",
-                debounce(
-                    async () => {
-                        if (likeBtn.classList.contains("is-liked")) return;
-
-                        // Optimistic UI
-                        if (likesEl)
-                            likesEl.textContent = (
-                                parseInt(likesEl.textContent || "0") + 1
-                            ).toString();
-                        likeBtn.classList.add("is-liked");
-                        (likeBtn as HTMLButtonElement).disabled = true;
-
-                        try {
-                            await fetch(`/api/stats/${this.slug}`, {
-                                method: "POST",
-                                body: JSON.stringify({ type: "like" }),
-                                headers: { "Content-Type": "application/json" },
-                            });
-                            // No need to fetch updated stats, we trusted optimistic (or we could)
-                        } catch (e) {
-                            console.error("Like failed", e);
-                        }
-                    },
-                    300,
-                    { leading: true, trailing: false },
-                ),
-            );
-
-            let timer: ReturnType<typeof setTimeout> | null = null;
-            // Share Interaction
-            shareBtn?.addEventListener(
-                "click",
-                debounce(
-                    async () => {
-                        if (timer) {
-                            clearTimeout(timer);
-                        }
-
-                        try {
-                            await navigator.clipboard.writeText(
-                                window.location.href,
-                            );
-
-                            if (shareBtn instanceof HTMLElement) {
-                                shareBtn.classList.add(
-                                    "border-green-500/50",
-                                    "bg-green-500/10",
-                                );
-                                shareBtn.classList.remove(
-                                    "hover:border-indigo-500/30",
-                                    "hover:bg-indigo-500/10",
-                                );
-                            }
-                            shareIcon?.classList.add(
-                                "scale-0",
-                                "rotate-90",
-                                "opacity-0",
-                            );
-                            shareIcon?.classList.remove(
-                                "scale-100",
-                                "rotate-0",
-                            );
-                            checkIcon?.classList.remove(
-                                "scale-0",
-                                "rotate-90",
-                                "opacity-0",
-                            );
-                            checkIcon?.classList.add(
-                                "scale-100",
-                                "rotate-0",
-                                "opacity-100",
-                            );
-                            tooltip?.classList.remove("opacity-0");
-                            tooltip?.classList.add("opacity-100");
-
-                            timer = setTimeout(() => {
-                                if (shareBtn instanceof HTMLElement) {
-                                    shareBtn.classList.remove(
-                                        "border-green-500/50",
-                                        "bg-green-500/10",
-                                    );
-                                    shareBtn.classList.add(
-                                        "hover:border-indigo-500/30",
-                                        "hover:bg-indigo-500/10",
-                                    );
-                                }
-                                shareIcon?.classList.remove(
-                                    "scale-0",
-                                    "rotate-90",
-                                    "opacity-0",
-                                );
-                                shareIcon?.classList.add(
-                                    "scale-100",
-                                    "rotate-0",
-                                );
-                                checkIcon?.classList.add(
-                                    "scale-0",
-                                    "rotate-90",
-                                    "opacity-0",
-                                );
-                                checkIcon?.classList.remove(
-                                    "scale-100",
-                                    "rotate-0",
-                                    "opacity-100",
-                                );
-                                tooltip?.classList.add("opacity-0");
-                                tooltip?.classList.remove("opacity-100");
-                                timer = null;
-                            }, 2000);
-                        } catch (err) {
-                            console.error("Failed to copy", err);
-                        }
-                    },
-                    300,
-                    { leading: true, trailing: false },
-                ),
-            );
-        }
+    constructor() {
+      super();
+      this.slug = this.dataset.slug;
     }
 
-    customElements.define("blog-stats", BlogStats);
+    connectedCallback() {
+      if (!this.slug) return;
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              // 1. Lazy Load Stats (GET) - Only once
+              if (!this.hasFetchedStats) {
+                this.fetchStats();
+                this.hasFetchedStats = true;
+                // Initialize event listeners once
+                this.initInteractive();
+              }
+
+              // 2. Start View Timer (POST) - "Time on screen" check
+              if (!countedViews.has(this.slug!) && !this.viewTimer) {
+                this.viewTimer = window.setTimeout(() => {
+                  this.registerView();
+                }, 2000); // Only count if visible for 2s
+              }
+            } else {
+              // User scrolled away - Cancel view count
+              if (this.viewTimer) {
+                clearTimeout(this.viewTimer);
+                this.viewTimer = undefined;
+              }
+            }
+          });
+        },
+        { threshold: 0.5 },
+      ); // Require 50% visibility
+
+      this.observer.observe(this);
+    }
+
+    disconnectedCallback() {
+      if (this.viewTimer) clearTimeout(this.viewTimer);
+      this.observer?.disconnect();
+    }
+
+    async fetchStats() {
+      if (!this.slug) return;
+      try {
+        const res = await fetch(`/api/stats/${this.slug}`);
+        if (res.ok) {
+          const data = await res.json();
+          this.updateUI(data);
+        }
+      } catch (e) {
+        console.error("Failed to load stats", e);
+      }
+    }
+
+    async registerView() {
+      if (!this.slug || countedViews.has(this.slug)) return;
+
+      countedViews.add(this.slug);
+      this.viewTimer = undefined; // Clear timer ref
+
+      try {
+        const res = await fetch(`/api/stats/${this.slug}`, {
+          method: "POST",
+          body: JSON.stringify({ type: "view" }),
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        this.updateUI(data);
+
+        // We can stop observing now as view is counted
+        this.observer?.disconnect();
+      } catch (e) {
+        // Ignore errors
+      }
+    }
+
+    updateUI(data: { views: number; likes: number; userHasLiked: boolean }) {
+      const viewsEl = this.querySelector(".views-count");
+      const likesEl = this.querySelector(".likes-count");
+      const likeBtn = this.querySelector(".like-button");
+
+      if (viewsEl) {
+        viewsEl.textContent = data.views.toLocaleString();
+        viewsEl.classList.remove("animate-pulse", "bg-white/5");
+      }
+      if (likesEl) {
+        likesEl.textContent = data.likes.toLocaleString();
+        likesEl.classList.remove("animate-pulse", "bg-white/5");
+      }
+      if (data.userHasLiked) {
+        likeBtn?.classList.add("is-liked");
+        if (likeBtn) (likeBtn as HTMLButtonElement).disabled = true;
+      }
+    }
+
+    initInteractive() {
+      const likeBtn = this.querySelector(".like-button");
+      const likesEl = this.querySelector(".likes-count");
+      const shareBtn = this.querySelector(".share-button");
+      const shareIcon = this.querySelector(".share-icon");
+      const checkIcon = this.querySelector(".check-icon");
+      const tooltip = this.querySelector("#share-tooltip");
+
+      // Like Interaction
+      likeBtn?.addEventListener(
+        "click",
+        debounce(
+          async () => {
+            if (likeBtn.classList.contains("is-liked")) return;
+
+            // Optimistic UI
+            if (likesEl)
+              likesEl.textContent = (parseInt(likesEl.textContent || "0") + 1).toString();
+            likeBtn.classList.add("is-liked");
+            (likeBtn as HTMLButtonElement).disabled = true;
+
+            try {
+              await fetch(`/api/stats/${this.slug}`, {
+                method: "POST",
+                body: JSON.stringify({ type: "like" }),
+                headers: { "Content-Type": "application/json" },
+              });
+              // No need to fetch updated stats, we trusted optimistic (or we could)
+            } catch (e) {
+              console.error("Like failed", e);
+            }
+          },
+          300,
+          { leading: true, trailing: false },
+        ),
+      );
+
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      // Share Interaction
+      shareBtn?.addEventListener(
+        "click",
+        debounce(
+          async () => {
+            if (timer) {
+              clearTimeout(timer);
+            }
+
+            try {
+              await navigator.clipboard.writeText(window.location.href);
+
+              if (shareBtn instanceof HTMLElement) {
+                shareBtn.classList.add("border-green-500/50", "bg-green-500/10");
+                shareBtn.classList.remove("hover:border-indigo-500/30", "hover:bg-indigo-500/10");
+              }
+              shareIcon?.classList.add("scale-0", "rotate-90", "opacity-0");
+              shareIcon?.classList.remove("scale-100", "rotate-0");
+              checkIcon?.classList.remove("scale-0", "rotate-90", "opacity-0");
+              checkIcon?.classList.add("scale-100", "rotate-0", "opacity-100");
+              tooltip?.classList.remove("opacity-0");
+              tooltip?.classList.add("opacity-100");
+
+              timer = setTimeout(() => {
+                if (shareBtn instanceof HTMLElement) {
+                  shareBtn.classList.remove("border-green-500/50", "bg-green-500/10");
+                  shareBtn.classList.add("hover:border-indigo-500/30", "hover:bg-indigo-500/10");
+                }
+                shareIcon?.classList.remove("scale-0", "rotate-90", "opacity-0");
+                shareIcon?.classList.add("scale-100", "rotate-0");
+                checkIcon?.classList.add("scale-0", "rotate-90", "opacity-0");
+                checkIcon?.classList.remove("scale-100", "rotate-0", "opacity-100");
+                tooltip?.classList.add("opacity-0");
+                tooltip?.classList.remove("opacity-100");
+                timer = null;
+              }, 2000);
+            } catch (err) {
+              console.error("Failed to copy", err);
+            }
+          },
+          300,
+          { leading: true, trailing: false },
+        ),
+      );
+    }
+  }
+
+  customElements.define("blog-stats", BlogStats);
 </script>
